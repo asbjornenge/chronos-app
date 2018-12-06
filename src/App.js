@@ -1,7 +1,11 @@
 import React, { Component } from 'react'
+import { Provider } from 'react-redux'
 import Router from 'tiny-react-router'
 import Dashboard from './screens/Dashboard'
+import createStore from './store'
 import './App.css'
+
+let store = createStore()
 
 let routes = {
   '/' : Dashboard
@@ -14,7 +18,9 @@ class App extends Component {
         <header className="App-header">
           <img alt="logo" src="/graphics/logo.png" />
         </header>
-        <Router routes={routes} />
+        <Provider store={store}>
+          <Router routes={routes} />
+        </Provider>
       </div>
     );
   }
