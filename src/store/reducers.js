@@ -1,15 +1,18 @@
-import reduxApi, {transformers} from 'redux-api'
-import adapterFetch from 'redux-api/lib/adapters/fetch'
+const SET_DASHBOARD_FILTER = 'SET_DASHBOARD_FILTER'
 
-export default reduxApi({
-  entry: `/api/v1/entry/:id`,
-  regions: {
-    url: `/api/v1/regions`,
-    transformer: transformers.array,
-    options: {
-      headers: {
-        'Accept': 'application/json'
-      }
-    }
+const initialState = {
+  dashboardFilter: '',
+  dashboardNameFilter: ''
+}
+
+export default function dashboardApp(state = initialState, action) {
+  switch (action.type) {
+    case SET_DASHBOARD_FILTER:
+      return Object.assign({}, state, {
+        dashboardFilter: action.filter
+      })
+    default:
+      return state
   }
-}).use('fetch', adapterFetch(fetch))
+}
+

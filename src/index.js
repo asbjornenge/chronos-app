@@ -17,8 +17,8 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <Header />
         <Provider store={store}>
+          <Header />
           <Router routes={routes} />
         </Provider>
       </div>

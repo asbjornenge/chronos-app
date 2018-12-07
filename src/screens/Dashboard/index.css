@@ -1,17 +1,22 @@
+.Dashboard {
+  --font-size: 18px;
+  --box-height: 50px;
+}
+
 .Dashboard {}
 
 .Dashboard .top {
   display: flex;
   padding: 30px;
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .Dashboard .top input {
-  height: 50px;
+  height: var(--box-height);
   width: 300px;
-  font-size: 18px;
+  font-size: var(--font-size);
   border-radius: 5px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--border-color);
   text-indent: 10px;
 }
 
@@ -21,16 +26,20 @@
 }
 
 .Dashboard .filterbutton {
-  border: 1px solid #ccc;
-  height: 50px;
+  border: 1px solid var(--border-color);
+  height: var(--box-height);
   width: 140px;
-  line-height: 50px;
+  line-height: var(--box-height);
   border-right: 0;
   cursor: pointer;
-  font-size: 18px;
+  font-size: var(--font-size); 
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.Dashboard .filterbutton.selected {
+  background-color: var(--background-color); 
 }
 
 .Dashboard .filterbutton img {
@@ -39,10 +48,11 @@
 
 .Dashboard .filterbutton span {
   margin-left: 10px;
+  user-select: none;
 }
 
 .Dashboard .filterbutton.last {
-  border-right: 1px solid #ccc;
+  border-right: 1px solid var(--border-color);
   border-radius: 0px 5px 5px 0px;
 }
 
