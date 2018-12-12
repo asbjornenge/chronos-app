@@ -24,3 +24,6 @@ code {
   padding-right: 30px;
 }
 
+.spacer {
+  flex: auto;
+}

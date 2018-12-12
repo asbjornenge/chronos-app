@@ -1,0 +1,19 @@
+.TaskListItem {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  border-bottom: 1px solid var(--background-color);
+}
+
+.TaskListItem span {
+  display: block;
+  padding: 10px;
+}
+
+.TaskListItem img {
+  height: 20px;
+}
+.TaskListItem img:first-of-type {
+  padding-left: 10px;
+}
