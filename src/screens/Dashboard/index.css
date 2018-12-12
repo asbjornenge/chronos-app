@@ -60,6 +60,12 @@
   border-radius: 5px 0px 0px 5px;
 }
 
+.Dashboard .filterbutton.add {
+  width: 50px;
+  background-color: var(--color-blue-light);
+  border-color: var(--color-blue);
+}
+
 .Dashboard .TaskListItems {
   display: flex;
   flex-direction: column;

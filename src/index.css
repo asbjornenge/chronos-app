@@ -1,6 +1,8 @@
 :root {
   --background-color: #eaeaea;
   --border-color: #ccc;
+  --color-blue: #006DF0;
+  --color-blue-light: #3591ff;
 }
 
 body {

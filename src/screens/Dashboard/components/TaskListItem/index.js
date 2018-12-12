@@ -11,6 +11,7 @@ export default class TaskListItem extends Component {
         <span>{`${this.props.task.name} (${this.props.task.numberOfSteps})`}</span>
         <span className="spacer"></span>
         <span>{moment(this.props.task.timestamp).fromNow()}</span>
+        <img src={`/graphics/details.svg`} alt="details" />
       </div>
     )
   }

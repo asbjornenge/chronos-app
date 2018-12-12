@@ -14,6 +14,10 @@
 .TaskListItem img {
   height: 20px;
 }
-.TaskListItem img:first-of-type {
-  padding-left: 10px;
+
+.TaskListItem img:last-of-type {
+  cursor: pointer;
+}
+.TaskListItem img:last-of-type:active {
+  opacity: 0.5;
 }

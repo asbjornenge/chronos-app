@@ -76,10 +76,14 @@ class Dashboard extends Component {
               <span>PASSING</span>
             </div>
             <div 
-              className={`filterbutton last ${this.props.filter === 'paused' ? 'selected' : ''}`} 
+              className={`filterbutton ${this.props.filter === 'paused' ? 'selected' : ''}`} 
               onClick={this.updateFilter.bind(this, 'paused')}>
               <img src="/graphics/paused.svg" alt="paused" />
               <span>PAUSED</span>
+            </div>
+            <div 
+              className={`filterbutton last add`}> 
+              <img src="/graphics/add-white.svg" alt="add" />
             </div>
           </div>
         </div>
