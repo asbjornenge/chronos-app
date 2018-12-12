@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-//import { connect } from 'react-redux'
 import moment from 'moment'
+import { nav } from '../../../../shared/utils'
 import './index.css'
 
 export default class TaskListItem extends Component {
@@ -11,8 +11,11 @@ export default class TaskListItem extends Component {
         <span>{`${this.props.task.name} (${this.props.task.numberOfSteps})`}</span>
         <span className="spacer"></span>
         <span>{moment(this.props.task.timestamp).fromNow()}</span>
-        <img src={`/graphics/details.svg`} alt="details" />
+        <img src={`/graphics/details.svg`} alt="details" onClick={this.openTaskDetails.bind(this)} />
       </div>
     )
+  }
+  openTaskDetails() {
+    nav(`/task/${this.props.task.id}`)
   }
 }
