@@ -8,6 +8,7 @@
 .Dashboard .top {
   display: flex;
   padding: 30px;
+  padding-left: 0px;
   border-bottom: 1px solid var(--border-color);
 }
 
