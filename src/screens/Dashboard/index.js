@@ -61,7 +61,7 @@ class Dashboard extends Component {
             type="search" 
             value={this.props.nameFilter}
             onChange={this.updateNameFilter.bind(this)}
-            placeholder="Name Contains" />
+            placeholder="Task Name" />
           <div className="filterbuttons">
             <div 
               className={`filterbutton first ${this.props.filter === 'failing' ? 'selected' : ''}`} 
