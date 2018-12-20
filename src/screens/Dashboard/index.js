@@ -41,7 +41,6 @@ const taskList = [
 
 class Dashboard extends Component {
   render() {
-    console.log(this.props.tasks.data)
     let tasks = (this.props.tasks.data.data || []) 
       .filter(t => {
         if (this.props.filter === '') return true
