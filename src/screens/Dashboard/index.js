@@ -5,6 +5,7 @@ import {
   SET_DASHBOARD_FILTER, 
   SET_DASHBOARD_NAME_FILTER
 } from '../../store/reducers'
+import rest from '../../store/rest'
 import './index.css'
 
 const taskList = [
@@ -40,7 +41,8 @@ const taskList = [
 
 class Dashboard extends Component {
   render() {
-    let tasks = taskList
+    console.log(this.props.tasks.data)
+    let tasks = (this.props.tasks.data.data || []) 
       .filter(t => {
         if (this.props.filter === '') return true
         if (this.props.filter === t.status) return true
@@ -100,11 +102,22 @@ class Dashboard extends Component {
   updateNameFilter(e) {
     this.props.updateNameFilter(e.target.value)
   }
+  componentDidMount() {
+    this.props.dispatch(rest.actions.tasks.sync())
+  }
+}
+
+Dashboard.defaultProps = {
+  tasks: {
+    loading: false,
+    data: {}
+  }
 }
 
 export default connect(
   (state) => {
     return {
+      tasks: state.tasks,
       filter: state.app.dashboardFilter,
       nameFilter: state.app.dashboardNameFilter
     }
@@ -122,7 +135,8 @@ export default connect(
           type: SET_DASHBOARD_NAME_FILTER,
           filter: filter
         })
-      }
+      },
+      dispatch: dispatch
     }
   }
 )(Dashboard)

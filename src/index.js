@@ -8,6 +8,8 @@ import Task from './screens/Task'
 import createStore from './store'
 import './index.css';
 
+window.apihost = window.location.hostname === 'localhost' ? `http://${window.location.hostname}:3001` : '/api'
+
 let store = createStore()
 
 let routes = {
