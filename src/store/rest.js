@@ -3,7 +3,9 @@ import reduxApi, {transformers} from 'redux-api'
 
 export default reduxApi({
   dashboard: `/dashboard`,
+  task: `/tasks/:id`,
   tasks: `/tasks`,
+  steps: `/tasks/:task/steps`,
   regions: {
     url: `/api/v1/regions`,
     transformer: transformers.array,

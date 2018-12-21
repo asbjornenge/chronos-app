@@ -1,0 +1,66 @@
+.FilterBar {
+  --font-size: 18px;
+  --box-height: 50px;
+}
+
+.FilterBar {
+  display: flex;
+  padding: 30px;
+  padding-left: 0px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.FilterBar input {
+  height: var(--box-height);
+  width: 300px;
+  font-size: var(--font-size);
+  border-radius: 5px;
+  border: 1px solid var(--border-color);
+  text-indent: 10px;
+}
+
+.FilterBar .filterbuttons {
+  display: flex;
+  margin-left: 30px;
+}
+
+.FilterBar .filterbutton {
+  border: 1px solid var(--border-color);
+  height: var(--box-height);
+  width: 140px;
+  line-height: var(--box-height);
+  border-right: 0;
+  cursor: pointer;
+  font-size: var(--font-size); 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.FilterBar .filterbutton.selected {
+  background-color: var(--background-color); 
+}
+
+.FilterBar .filterbutton img {
+  height: 25px;
+}
+
+.FilterBar .filterbutton span {
+  margin-left: 10px;
+  user-select: none;
+}
+
+.FilterBar .filterbutton.last {
+  border-right: 1px solid var(--border-color);
+  border-radius: 0px 5px 5px 0px;
+}
+
+.FilterBar .filterbutton.first {
+  border-radius: 5px 0px 0px 5px;
+}
+
+.FilterBar .filterbutton.add {
+  width: 50px;
+  background-color: var(--color-blue-light);
+  border-color: var(--color-blue);
+}

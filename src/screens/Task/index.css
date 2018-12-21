@@ -1,0 +1,25 @@
+.Task {
+  --font-size: 18px;
+  --box-height: 50px;
+}
+
+.TaskBody {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.TaskBody .top {
+  display: flex;
+  align-items: center;
+}
+
+.TaskBody .top img {
+  height: 35px;
+}
+
+.TaskBody .top h1 {
+  padding: 10px;
+  margin-left: 10px;
+}
