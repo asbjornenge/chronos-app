@@ -7,6 +7,7 @@ import './index.css'
 
 class TaskBody extends Component {
   render() {
+    // TODO: Make a path thing instead of that simple h1 - possible to navigate back in stack
     let status = getTaskStatus(this.props.task)
     return (
       <div className="TaskBody">
@@ -22,9 +23,8 @@ class TaskBody extends Component {
 class Task extends Component {
   render() {
     let body = null
-    if (isRestReady(this.props.task) && isRestReady(this.props.steps)) {
+    if (isRestReady(this.props.task)) {
       let task = this.props.task.data
-      task.steps = this.props.steps.data.data
       body = <TaskBody {...this.props} task={task} />
     }
     return (
@@ -35,16 +35,14 @@ class Task extends Component {
     )
   }
   componentDidMount() {
-    this.props.dispatch(rest.actions.task({id:this.props.id}))
-    this.props.dispatch(rest.actions.steps({task:this.props.id}))
+    this.props.dispatch(rest.actions.task({id:this.props.id, steps:true, execs:10}))
   }
 }
 
 export default connect(
   (state) => {
     return {
-      task: state.task,
-      steps: state.steps
+      task: state.task
     }
   },
   (dispatch) => {

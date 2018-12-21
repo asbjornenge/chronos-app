@@ -1,20 +1,11 @@
-import reduxApi, {transformers} from 'redux-api'
-//import adapterFetch from 'redux-api/lib/adapters/fetch'
+import reduxApi from 'redux-api'
 
 export default reduxApi({
   dashboard: `/dashboard`,
   task: `/tasks/:id`,
   tasks: `/tasks`,
   steps: `/tasks/:task/steps`,
-  regions: {
-    url: `/api/v1/regions`,
-    transformer: transformers.array,
-    options: {
-      headers: {
-        'Accept': 'application/json'
-      }
-    }
-  }
+  execs: `/tasks/:task/steps/:step/execs`,
 }).use('fetch', adapterFetch)
 
 async function adapterFetch(url, options) {
