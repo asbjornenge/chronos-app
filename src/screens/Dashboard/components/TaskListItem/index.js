@@ -5,12 +5,22 @@ import './index.css'
 
 export default class TaskListItem extends Component {
   render() {
+    let timestamp = null
+    let status = 'passing'
+    this.props.task.steps.forEach(s => {
+      s.execs.forEach(e => {
+        if (e.exitcode != 0) status = 'failing'
+        if (timestamp === null) timestamp = moment(e.time_end)
+        else if (moment(e.time_end) > timestamp) timestamp = moment(e.time_end)
+      })
+    })
+    if (this.props.task.paused) status = 'paused'
     return (
       <div className="TaskListItem">
-        <img src={`/graphics/${this.props.task.status}.svg`} alt={this.props.task.status} />
-        <span>{`${this.props.task.name} (${this.props.task.numberOfSteps})`}</span>
+        <img src={`/graphics/${status}.svg`} alt={status} />
+        <span>{`${this.props.task.name} (${this.props.task.steps.length})`}</span>
         <span className="spacer"></span>
-        <span>{moment(this.props.task.timestamp).fromNow()}</span>
+        <span>{timestamp ? timestamp.fromNow() : 'Never'}</span>
         <img src={`/graphics/details.svg`} alt="details" onClick={this.openTaskDetails.bind(this)} />
       </div>
     )

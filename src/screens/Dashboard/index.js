@@ -102,21 +102,14 @@ class Dashboard extends Component {
     this.props.updateNameFilter(e.target.value)
   }
   componentDidMount() {
-    this.props.dispatch(rest.actions.tasks.sync())
-  }
-}
-
-Dashboard.defaultProps = {
-  tasks: {
-    loading: false,
-    data: {}
+    this.props.dispatch(rest.actions.dashboard.sync())
   }
 }
 
 export default connect(
   (state) => {
     return {
-      tasks: state.tasks,
+      tasks: state.dashboard,
       filter: state.app.dashboardFilter,
       nameFilter: state.app.dashboardNameFilter
     }

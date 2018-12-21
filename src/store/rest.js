@@ -2,6 +2,7 @@ import reduxApi, {transformers} from 'redux-api'
 //import adapterFetch from 'redux-api/lib/adapters/fetch'
 
 export default reduxApi({
+  dashboard: `/dashboard`,
   tasks: `/tasks`,
   regions: {
     url: `/api/v1/regions`,
