@@ -9,11 +9,19 @@ class TaskBody extends Component {
   render() {
     // TODO: Make a path thing instead of that simple h1 - possible to navigate back in stack
     let status = getTaskStatus(this.props.task)
+    // let lastexec = getTaskLastExec(this.props.task) - to figure out when it ran last and
+    // what step to select and what exec stdout to show
     return (
       <div className="TaskBody">
         <div className="top">
           <img src={`/graphics/${status}.svg`} alt={status} />
           <h1>{this.props.task.name}</h1>
+          <div className="spacer"></div>
+          <div className="cron">{this.props.task.cron}</div>
+          <img src={`/graphics/paused.svg`} alt="pause" />
+        </div>
+        <div className="StepList">
+
         </div>
       </div>
     )

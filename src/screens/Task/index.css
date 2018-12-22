@@ -13,6 +13,7 @@
 .TaskBody .top {
   display: flex;
   align-items: center;
+  width: 100%;
 }
 
 .TaskBody .top img {
@@ -22,4 +23,9 @@
 .TaskBody .top h1 {
   padding: 10px;
   margin-left: 10px;
+}
+
+.TaskBody .top .cron {
+  margin-right: 20px;
+  font-size: var(--font-size);
 }

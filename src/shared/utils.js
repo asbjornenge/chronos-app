@@ -21,3 +21,7 @@ export function setTaskStatus(task) {
   task.status = getTaskStatus(task)
   return task
 }
+
+export function getTaskLastExec(task) {
+
+}
