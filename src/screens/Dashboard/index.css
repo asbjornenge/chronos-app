@@ -9,3 +9,10 @@
   justify-content: flex-start;
   align-items: flex-start;
 }
+
+.Dashboard .TaskListItemsError {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50vh;
+}

@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import TaskListItem from './components/TaskListItem'
 import FilterBar from '../../shared/components/FilterBar'
+import Loading from '../../shared/components/Loading'
+import Error from '../../shared/components/Error'
 import { setTaskStatus } from '../../shared/utils'
 import rest from '../../store/rest'
 import './index.css'
@@ -23,10 +25,17 @@ class Dashboard extends Component {
       .map(t => {
         return <TaskListItem key={t.id} task={t} />
       })
+    let error = (this.props.tasks.loading || this.props.tasks.error != null)
+    if (error) {
+      tasks = <Loading style={{flex:'auto', width: 200, height: 200}} />
+    }
+    if (this.props.tasks.error != null) {
+      tasks = <Error message={this.props.tasks.error.message} />
+    }
     return (
       <div className="Dashboard">
         <FilterBar />
-        <div className="TaskListItems">
+        <div className={error ? "TaskListItemsError" : "TaskListItems"}>
           {tasks}
         </div> 
       </div>
