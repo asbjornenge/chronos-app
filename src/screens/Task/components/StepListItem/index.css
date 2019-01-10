@@ -1,0 +1,25 @@
+.StepListItem {
+  display: flex;
+  height: 50px;
+  align-items: center;
+  border-bottom: 1px solid var(--background-color);
+  border-right: 1px solid var(--background-color);
+  cursor: pointer;
+}
+
+.StepListItem:last-of-type {
+  border-bottom: none;
+}
+
+.StepListItem.selected {
+  border-right: none; 
+}
+
+.StepListItem span {
+  display: block;
+  padding: 10px;
+}
+
+.StepListItem img {
+  height: 20px;
+}

@@ -1,8 +1,11 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import FilterBar from '../../shared/components/FilterBar'
+import Loading from '../../shared/components/Loading'
+import Error from '../../shared/components/Error'
 import rest from '../../store/rest'
 import { getTaskStatus, isRestReady } from '../../shared/utils'
+import StepListItem from './components/StepListItem'
 import './index.css'
 
 class TaskBody extends Component {
@@ -11,6 +14,9 @@ class TaskBody extends Component {
     let status = getTaskStatus(this.props.task)
     // let lastexec = getTaskLastExec(this.props.task) - to figure out when it ran last and
     // what step to select and what exec stdout to show
+    let steps = this.props.task.steps.map(s => {
+      return <StepListItem key={s.id} step={s} />
+    })
     return (
       <div className="TaskBody">
         <div className="top">
@@ -20,8 +26,16 @@ class TaskBody extends Component {
           <div className="cron">{this.props.task.cron}</div>
           <img src={`/graphics/paused.svg`} alt="pause" />
         </div>
-        <div className="StepList">
-
+        <div className="TaskInfoWrapper">
+          <div className="StepList">
+            {steps}
+          </div>
+          <div className="ExecList">
+            execs here
+          </div>
+          <div className="ExecOutput">
+            outout here
+          </div>
         </div>
       </div>
     )
@@ -31,6 +45,22 @@ class TaskBody extends Component {
 class Task extends Component {
   render() {
     let body = null
+    let loading = this.props.task.loading
+    let error = this.props.task.error != null
+    if (loading) {
+      body = (
+        <div className="TaskError">
+          <Loading style={{flex:'auto', width: 200, height: 200}} />
+        </div>
+      )
+    }
+    if (error) {
+      body = (
+        <div className="TaskError">
+          <Error message={this.props.task.error.message} />
+        </div>
+      )
+    }
     if (isRestReady(this.props.task)) {
       body = <TaskBody {...this.props} task={this.props.task.data} />
     }

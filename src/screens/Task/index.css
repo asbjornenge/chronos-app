@@ -3,11 +3,19 @@
   --box-height: 50px;
 }
 
-.TaskBody {
+.Task .TaskBody {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
+}
+
+.Task .TaskError {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 50vh;
 }
 
 .TaskBody .top {
@@ -28,4 +36,25 @@
 .TaskBody .top .cron {
   margin-right: 20px;
   font-size: var(--font-size);
+}
+
+.TaskBody .TaskInfoWrapper {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.TaskBody .TaskInfoWrapper > div {
+  border: 1px solid var(--border-color);
+  border-left: none;
+  border-right: none;
+  flex: 1;
+}
+
+.TaskBody .TaskInfoWrapper > div:last-of-type {
+  border-right: 1px solid var(--border-color);
+}
+
+.TaskBody .TaskInfoWrapper > div:first-of-type {
+  border-left: 1px solid var(--border-color);
 }
