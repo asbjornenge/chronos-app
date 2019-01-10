@@ -64,3 +64,8 @@
   background-color: var(--color-blue-light);
   border-color: var(--color-blue);
 }
+
+.FilterBar .filterbutton.add.step {
+  background-color: var(--color-green-light);
+  border-color: var(--color-green);
+}

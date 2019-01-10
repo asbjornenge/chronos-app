@@ -34,7 +34,7 @@ class Dashboard extends Component {
     }
     return (
       <div className="Dashboard">
-        <FilterBar />
+        <FilterBar placeholder="Task name" type="task" />
         <div className={error ? "TaskListItemsError" : "TaskListItems"}>
           {tasks}
         </div> 

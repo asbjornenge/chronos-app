@@ -14,7 +14,7 @@ class FilterBar extends Component {
           type="search" 
           value={this.props.nameFilter}
           onChange={this.updateNameFilter.bind(this)}
-          placeholder="Task Name" />
+          placeholder={this.props.placeholder || ''} />
         <div className="filterbuttons">
           <div 
             className={`filterbutton first ${this.props.filter === 'failing' ? 'selected' : ''}`} 
@@ -35,7 +35,7 @@ class FilterBar extends Component {
             <span>PAUSED</span>
           </div>
           <div 
-            className={`filterbutton last add`}> 
+            className={`filterbutton last add ${this.props.type || ''}`}> 
             <img src="/graphics/add-white.svg" alt="add" />
           </div>
         </div>

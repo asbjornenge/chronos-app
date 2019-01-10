@@ -32,12 +32,11 @@ class Task extends Component {
   render() {
     let body = null
     if (isRestReady(this.props.task)) {
-      let task = this.props.task.data
-      body = <TaskBody {...this.props} task={task} />
+      body = <TaskBody {...this.props} task={this.props.task.data} />
     }
     return (
       <div className="Task">
-        <FilterBar />
+        <FilterBar placeholder="Step name" type="step" />
         {body} 
       </div>
     )
