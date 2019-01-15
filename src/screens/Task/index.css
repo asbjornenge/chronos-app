@@ -46,15 +46,13 @@
 
 .TaskBody .TaskInfoWrapper > div {
   border: 1px solid var(--border-color);
-  border-left: none;
-  border-right: none;
   flex: 1;
 }
 
 .TaskBody .TaskInfoWrapper > div:last-of-type {
-  border-right: 1px solid var(--border-color);
+  border-left: none; 
 }
 
 .TaskBody .TaskInfoWrapper > div:first-of-type {
-  border-left: 1px solid var(--border-color);
+  border-right: none; 
 }

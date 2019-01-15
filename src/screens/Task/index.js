@@ -6,16 +6,40 @@ import Error from '../../shared/components/Error'
 import rest from '../../store/rest'
 import { getTaskStatus, isRestReady } from '../../shared/utils'
 import StepListItem from './components/StepListItem'
+import ExecListItem from './components/ExecListItem'
+import ExecOutput from './components/ExecOutput'
 import './index.css'
 
 class TaskBody extends Component {
+  state = {
+    selectedStep: {},
+    selectedExec: {}
+  }
   render() {
     // TODO: Make a path thing instead of that simple h1 - possible to navigate back in stack
     let status = getTaskStatus(this.props.task)
     // let lastexec = getTaskLastExec(this.props.task) - to figure out when it ran last and
     // what step to select and what exec stdout to show
+    let execs = []
+    let execOutput = null
     let steps = this.props.task.steps.map(s => {
-      return <StepListItem key={s.id} step={s} />
+      let selected = this.state.selectedStep.id === s.id
+      if (selected) execs = s.execs.map(e => {
+        let _selected = this.state.selectedExec.id === e.id
+        if (_selected) execOutput = <ExecOutput key={e.id+'output'} exec={e} />
+        return <ExecListItem
+                  key={e.id}
+                  exec={e}
+                  selected={_selected}
+                  onClick={() => {this.setState({ selectedExec: e })}}
+                />
+      })
+      return <StepListItem 
+                key={s.id} 
+                step={s} 
+                selected={selected} 
+                onClick={() => {this.setState({ selectedStep: s, selectedExec: {} })}}
+              />
     })
     return (
       <div className="TaskBody">
@@ -31,14 +55,35 @@ class TaskBody extends Component {
             {steps}
           </div>
           <div className="ExecList">
-            execs here
+            {execs}
           </div>
           <div className="ExecOutput">
-            outout here
+            {execOutput}
           </div>
         </div>
       </div>
     )
+  }
+  componentDidMount() {
+    let selectedStep, selectedExec;
+    this.props.task.steps.forEach((s) => {
+      s.execs.forEach(e => {
+        if (!selectedExec) {
+          selectedExec = e
+          selectedStep = s
+        }
+        if (e.time_start > selectedExec.time_start) {
+          selectedExec = e
+          selectedStep = s
+        }
+      })
+    })
+    if (selectedExec) {
+      this.setState({
+        selectedStep: selectedStep,
+        selectedExec: selectedExec
+      })
+    }
   }
 }
 

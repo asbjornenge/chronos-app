@@ -1,0 +1,21 @@
+.ExecOutput {
+  display: flex;
+  flex-direction: column;
+}
+
+.ExecOutput .OutputSelector {
+  display: flex;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.ExecOutput .OutputSelector > div {
+  flex: 1;
+  height: 30px;
+  line-height: 30px;
+  cursor: pointer;
+}
+
+.ExecOutput .OutputSelector > div.selected {
+  background-color: var(--background-color);
+}
+
