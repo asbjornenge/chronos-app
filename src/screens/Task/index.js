@@ -13,7 +13,8 @@ import './index.css'
 class TaskBody extends Component {
   state = {
     selectedStep: {},
-    selectedExec: {}
+    selectedExec: {},
+    editingStep: null
   }
   render() {
     // TODO: Make a path thing instead of that simple h1 - possible to navigate back in stack
@@ -37,7 +38,8 @@ class TaskBody extends Component {
       return <StepListItem 
                 key={s.id} 
                 step={s} 
-                selected={selected} 
+                selected={selected}
+                editStep={(step) => {this.setState({ editingStep: step })}} 
                 onClick={() => {this.setState({ selectedStep: s, selectedExec: {} })}}
               />
     })
@@ -54,12 +56,26 @@ class TaskBody extends Component {
           <div className="StepList">
             {steps}
           </div>
-          <div className="ExecList">
-            {execs}
-          </div>
-          <div className="ExecOutput">
-            {execOutput}
-          </div>
+          { !this.state.editingStep &&
+            <div className="ExecList">
+              {execs}
+            </div>
+          }
+          { !this.state.editingStep &&
+            <div className="ExecOutput">
+              {execOutput}
+            </div>
+          }
+          { this.state.editingStep &&
+            <div className="StepEdit">
+              <h2>Edit name-of-step</h2>
+              edit step here
+              <div className="buttons">
+                <button>Save</button>
+                <button onClick={() => {this.setState({ editingStep: null })}}>Cancel</button>
+              </div>
+            </div>
+          }
         </div>
       </div>
     )

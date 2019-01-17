@@ -28,3 +28,7 @@
   height: 20px;
   padding-left: 10px;
 }
+
+.StepListItem img.details {
+  padding-right: 10px;
+}
