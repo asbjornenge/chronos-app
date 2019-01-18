@@ -12,13 +12,10 @@ export default class ExecListItem extends Component {
     return (
       <div className={`ExecListItem ${this.props.selected ? 'selected' : ''}`} onClick={this.props.onClick}>
         <img src={`/graphics/${status}.svg`} alt={status} />
-        <span>{`${date} ${start}`}</span>
-        <span className="spacer"></span>
-        <div className="times">
-          <div>{`Start: ${start}`}</div>
-          <div>{`End: ${end}`}</div>
-          <div>{`Runtime: ${diff} s`}</div>
-        </div>
+        <span className="date">{date}</span>
+        <span className="meta">from</span><span className="date">{start}</span>
+        <span className="meta">to</span><span className="date">{end}</span>
+        <span className="meta">for</span><span className="date">{diff+'s'}</span>
       </div>
     )
   }

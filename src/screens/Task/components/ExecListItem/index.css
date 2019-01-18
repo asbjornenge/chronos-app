@@ -4,6 +4,7 @@
   align-items: center;
   border-bottom: 1px solid var(--background-color);
   cursor: pointer;
+  font-size: 12px;
 }
 
 .ExecListItem:last-of-type {
@@ -15,12 +16,21 @@
 
 .ExecListItem span {
   display: block;
-  padding: 10px;
+  padding: 3px;
+}
+
+.ExecListItem .date {
+  font-weight: bold;
+}
+
+.ExecListItem .meta {
+  font-style: italic;
 }
 
 .ExecListItem img {
   height: 20px;
   padding-left: 10px;
+  padding-right: 7px;
 }
 
 .ExecListItem .times {
