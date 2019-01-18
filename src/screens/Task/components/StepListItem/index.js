@@ -17,7 +17,9 @@ export default class StepListItem extends Component {
       </div>
     )
   }
-  editStep() {
+  editStep(e) {
+    e.preventDefault()
+    e.stopPropagation()
     this.props.editStep(this.props.step)
   }
 }

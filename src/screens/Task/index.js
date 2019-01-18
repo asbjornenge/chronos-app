@@ -6,6 +6,7 @@ import Error from '../../shared/components/Error'
 import rest from '../../store/rest'
 import { getTaskStatus, isRestReady } from '../../shared/utils'
 import StepListItem from './components/StepListItem'
+import StepForm from './components/StepForm'
 import ExecListItem from './components/ExecListItem'
 import ExecOutput from './components/ExecOutput'
 import './index.css'
@@ -40,7 +41,7 @@ class TaskBody extends Component {
                 step={s} 
                 selected={selected}
                 editStep={(step) => {this.setState({ editingStep: step })}} 
-                onClick={() => {this.setState({ selectedStep: s, selectedExec: {} })}}
+                onClick={() => {this.setState({ selectedStep: s, selectedExec: {}, editingStep: null })}}
               />
     })
     return (
@@ -69,9 +70,9 @@ class TaskBody extends Component {
           { this.state.editingStep &&
             <div className="StepEdit">
               <h2>Edit name-of-step</h2>
-              edit step here
+              <StepForm ref="form" step={this.state.editingStep} />
               <div className="buttons">
-                <button>Save</button>
+                <button onClick={this.submitStepForm.bind(this)}>Save</button>
                 <button onClick={() => {this.setState({ editingStep: null })}}>Cancel</button>
               </div>
             </div>
@@ -79,6 +80,9 @@ class TaskBody extends Component {
         </div>
       </div>
     )
+  }
+  submitStepForm() {
+    this.refs.form.submit()
   }
   componentDidMount() {
     let selectedStep, selectedExec;

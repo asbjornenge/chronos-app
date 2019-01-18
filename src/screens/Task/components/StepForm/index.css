@@ -1,0 +1,49 @@
+.StepForm {
+  display: flex;
+  flex-direction: column;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  width: 100%;
+}
+
+.StepForm > div {
+  display: flex;
+  flex: auto;
+}
+
+.StepForm label {
+  width: 100px;
+  text-align: start;
+  align-items: center;
+  padding-left: 10px;
+  display: flex;
+}
+
+.StepForm input {
+  font-size: 14px;
+  border: 1px solid var(--border-color); 
+  margin-right: 10px;
+  flex: 1;
+  height: 30px;
+  text-indent: 5px;
+  outline: none!important;
+}
+
+.StepForm input:valid {
+  border-left: 1px solid var(--border-color); 
+}
+
+.StepForm input:invalid {
+  border-left: 1px solid red!important; 
+  outline: none;
+  box-shadow: none;
+}
+
+.StepForm input.first {
+  border-bottom: 0;
+}
+
+.StepForm input.last {
+  border-top: 0;
+}
+
