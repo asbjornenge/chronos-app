@@ -66,12 +66,3 @@
   align-items: flex-start;
 }
 
-.TaskBody .TaskInfoWrapper div.StepEdit h2 {
-  padding: 10px;
-  margin: 0px;
-}
-
-.TaskBody .TaskInfoWrapper div.StepEdit .buttons {
-  padding: 10px;
-  margin: 0px;
-}

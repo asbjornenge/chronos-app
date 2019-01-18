@@ -12,36 +12,29 @@ import ExecOutput from './components/ExecOutput'
 import './index.css'
 
 class TaskBody extends Component {
-  state = {
-    selectedStep: {},
-    selectedExec: {},
-    editingStep: null
-  }
   render() {
     // TODO: Make a path thing instead of that simple h1 - possible to navigate back in stack
     let status = getTaskStatus(this.props.task)
-    // let lastexec = getTaskLastExec(this.props.task) - to figure out when it ran last and
-    // what step to select and what exec stdout to show
     let execs = []
     let execOutput = null
     let steps = this.props.task.steps.map(s => {
-      let selected = this.state.selectedStep.id === s.id
+      let selected = this.props.selectedStep.id === s.id
       if (selected) execs = s.execs.map(e => {
-        let _selected = this.state.selectedExec.id === e.id
+        let _selected = this.props.selectedExec.id === e.id
         if (_selected) execOutput = <ExecOutput key={e.id+'output'} exec={e} />
         return <ExecListItem
                   key={e.id}
                   exec={e}
                   selected={_selected}
-                  onClick={() => {this.setState({ selectedExec: e })}}
+                  onClick={() => {this.props.setParentState({ selectedExec: e })}}
                 />
       })
       return <StepListItem 
                 key={s.id} 
                 step={s} 
                 selected={selected}
-                editStep={(step) => {this.setState({ editingStep: step })}} 
-                onClick={() => {this.setState({ selectedStep: s, selectedExec: {}, editingStep: null })}}
+                editStep={(step) => {this.props.setParentState({ editingStep: step })}} 
+                onClick={() => {this.props.setParentState({ selectedStep: s, selectedExec: {}, editingStep: null })}}
               />
     })
     return (
@@ -57,32 +50,39 @@ class TaskBody extends Component {
           <div className="StepList">
             {steps}
           </div>
-          { !this.state.editingStep &&
+          { !this.props.editingStep &&
             <div className="ExecList">
               {execs}
             </div>
           }
-          { !this.state.editingStep &&
+          { !this.props.editingStep &&
             <div className="ExecOutput">
               {execOutput}
             </div>
           }
-          { this.state.editingStep &&
+          { this.props.editingStep &&
             <div className="StepEdit">
-              <h2>Edit name-of-step</h2>
-              <StepForm ref="form" step={this.state.editingStep} />
-              <div className="buttons">
-                <button onClick={this.submitStepForm.bind(this)}>Save</button>
-                <button onClick={() => {this.setState({ editingStep: null })}}>Cancel</button>
-              </div>
+              <StepForm 
+                step={this.props.editingStep}
+                onCancel={this.cancelStepForm.bind(this)}
+                onSubmit={this.submitStepForm.bind(this)} 
+              />
             </div>
           }
         </div>
       </div>
     )
   }
-  submitStepForm() {
-    this.refs.form.submit()
+  cancelStepForm() {
+    this.props.setParentState({ editingStep: null })
+  }
+  submitStepForm(values) {
+    this.props.dispatch(rest.actions.step.put({id: values.id, task: this.props.task.id}, { body: JSON.stringify(values) }, (err, data) => {
+      if (err) return console.error(err)
+      this.props.setParentState({ editingStep: values })
+      this.props.dispatch(rest.actions.task.reset())
+      this.props.dispatch(rest.actions.task.sync({id:this.props.task.id, steps:true, execs:10}))
+    }))
   }
   componentDidMount() {
     let selectedStep, selectedExec;
@@ -99,7 +99,7 @@ class TaskBody extends Component {
       })
     })
     if (selectedExec) {
-      this.setState({
+      this.props.setParentState({
         selectedStep: selectedStep,
         selectedExec: selectedExec
       })
@@ -108,6 +108,11 @@ class TaskBody extends Component {
 }
 
 class Task extends Component {
+  state = {
+    selectedStep: {},
+    selectedExec: {},
+    editingStep: null
+  }
   render() {
     let body = null
     let loading = this.props.task.loading
@@ -127,7 +132,7 @@ class Task extends Component {
       )
     }
     if (isRestReady(this.props.task)) {
-      body = <TaskBody {...this.props} task={this.props.task.data} />
+      body = <TaskBody {...this.props} {...this.state} setParentState={this.setState.bind(this)} task={this.props.task.data} />
     }
     return (
       <div className="Task">

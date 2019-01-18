@@ -9,7 +9,7 @@ export default class StepListItem extends Component {
     return (
       <div className={`StepListItem ${this.props.selected ? 'selected' : ''}`} onClick={this.props.onClick}>
         <img src={`/graphics/${status}.svg`} alt={status} />
-        <pre>{this.props.step.command}</pre>
+        <span>{this.props.step.name}</span>
         <div className="spacer"></div>
         { this.props.selected &&
           <img className="details" src={`/graphics/details.svg`} alt="details" onClick={this.editStep.bind(this)} />

@@ -9,44 +9,63 @@ export default class StepForm extends Component {
   }
   render() {
     return (
-      <form ref="form" className="StepForm" onSubmit={this.submit.bind(this)}>
-        <div>
-          <label htmlFor="name">Name</label>
-          <input className="first" type="text" name="name" id="name" required 
-            placeholder="Name of step"
-            value={this.state.name} 
-            onChange={this.handleChange.bind(this, 'name')} 
-          />
+      <div className="StepForm">
+        { !this.props.step.name &&
+        <h2>Add step</h2>
+        }
+        { this.props.step.name &&
+        <h2>Edit {this.props.step.name}</h2>
+        }
+        <form ref="form" className="StepForm" onSubmit={this.submit.bind(this)}>
+          <div>
+            <label htmlFor="name">Name</label>
+            <input className="first" type="text" name="name" id="name" required 
+              placeholder="Name of step"
+              value={this.state.name || ''} 
+              onChange={this.handleChange.bind(this, 'name')} 
+            />
+          </div>
+          <div>
+            <label htmlFor="command">Command</label>
+            <input type="text" name="command" id="command" required 
+              placeholder="Command to run"
+              value={this.state.command || ''} 
+              onChange={this.handleChange.bind(this, 'command')} 
+            />
+          </div>
+          <div>
+            <label htmlFor="timeout">Timeout</label>
+            <input className="last" type="number" name="timeout" id="timeout" required 
+              placeholder="Execution timeout"
+              value={this.state.timeout || 0} 
+              onChange={this.handleChange.bind(this, 'timeout')}
+            />
+          </div>
+        </form>
+        <div className="buttons">
+          <button onClick={this.submit.bind(this)}>Save</button>
+          <button onClick={this.props.onCancel}>Cancel</button>
         </div>
-        <div>
-          <label htmlFor="command">Command</label>
-          <input type="text" name="command" id="command" required 
-            placeholder="Command to run"
-            value={this.state.command} 
-            onChange={this.handleChange.bind(this, 'command')} 
-          />
-        </div>
-        <div>
-          <label htmlFor="timeout">Timeout</label>
-          <input className="last" type="number" name="timeout" id="timeout" required 
-            placeholder="Execution timeout"
-            value={this.state.timeout} 
-            onChange={this.handleChange.bind(this, 'timeout')}
-          />
-        </div>
-      </form>
+      </div>
     )
   }
   submit() {
-    console.log('submitting', this.state)
+    if (!this.state.name || this.state.name.length === 0) return
+    if (!this.state.command || this.state.command.length === 0) return
+    if (!this.state.timeout) return
+    this._readyForProps = true
+    this.props.onSubmit(this.state)
   }
   handleChange(field, e) {
     let update = {}
     update[field] = e.target.value
     this.setState(Object.assign(this.state, update))
   }
-  componentDidMount() {
-    let { id, name='', command, timeout } = this.props.step
+  setStateFromStep(step) {
+    let { id, name, command, timeout } = step
     this.setState(Object.assign({id, name, command, timeout}))
+  }
+  componentDidMount() {
+    this.setStateFromStep(this.props.step)
   } 
 }

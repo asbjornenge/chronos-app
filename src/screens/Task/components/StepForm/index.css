@@ -6,6 +6,18 @@
   width: 100%;
 }
 
+.StepForm h2 {
+  padding: 10px;
+  padding-top: 0px;
+  margin: 0px;
+  text-align: left;
+}
+
+.TaskBody .TaskInfoWrapper div.StepEdit .buttons {
+  padding: 10px;
+  margin: 0px;
+}
+
 .StepForm > div {
   display: flex;
   flex: auto;
