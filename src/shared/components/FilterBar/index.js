@@ -35,6 +35,7 @@ class FilterBar extends Component {
             <span>PAUSED</span>
           </div>
           <div 
+            onClick={this.props.onAddClick}
             className={`filterbutton last add ${this.props.type || ''}`}> 
             <img src="/graphics/add-white.svg" alt="add" />
           </div>

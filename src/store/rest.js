@@ -6,12 +6,18 @@ export default reduxApi({
     url: `/tasks/:id`,
     crud: true
   },
-  tasks: `/tasks`,
+  tasks: {
+    url: `/tasks`,
+    crud: true
+  },
   step: {
     url: `/tasks/:task/steps/:id`,
     crud: true
   },
-  steps: `/tasks/:task/steps`,
+  steps: {
+    url: `/tasks/:task/steps`,
+    crud: true
+  },
   execs: `/tasks/:task/steps/:step/execs`,
 }).use('fetch', adapterFetch)
 

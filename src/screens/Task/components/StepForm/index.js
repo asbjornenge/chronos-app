@@ -45,9 +45,16 @@ export default class StepForm extends Component {
         <div className="buttons">
           <button onClick={this.submit.bind(this)}>Save</button>
           <button onClick={this.props.onCancel}>Cancel</button>
+          <div className="spacer"></div>
+          { this.props.step.id !== 0 &&
+          <button onClick={this.delete.bind(this)}>Delete</button>
+          }
         </div>
       </div>
     )
+  }
+  delete() {
+    this.props.onDelete(this.props.step)
   }
   submit() {
     if (!this.state.name || this.state.name.length === 0) return
@@ -64,6 +71,10 @@ export default class StepForm extends Component {
   setStateFromStep(step) {
     let { id, name, command, timeout } = step
     this.setState(Object.assign({id, name, command, timeout}))
+  }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.step.id !== this.props.step.id)
+      this.setStateFromStep(nextProps.step)
   }
   componentDidMount() {
     this.setStateFromStep(this.props.step)

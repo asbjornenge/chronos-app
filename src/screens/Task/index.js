@@ -11,13 +11,20 @@ import ExecListItem from './components/ExecListItem'
 import ExecOutput from './components/ExecOutput'
 import './index.css'
 
+const addStep = {
+  id: 0,
+  execs: []
+}
+
 class TaskBody extends Component {
   render() {
     // TODO: Make a path thing instead of that simple h1 - possible to navigate back in stack
     let status = getTaskStatus(this.props.task)
     let execs = []
     let execOutput = null
-    let steps = this.props.task.steps.map(s => {
+    let _steps = [].concat(this.props.task.steps)
+    if (this.props.addingStep) _steps.push(addStep)
+    let steps = _steps.map(s => {
       let selected = this.props.selectedStep.id === s.id
       if (selected) execs = s.execs.map(e => {
         let _selected = this.props.selectedExec.id === e.id
@@ -34,7 +41,7 @@ class TaskBody extends Component {
                 step={s} 
                 selected={selected}
                 editStep={(step) => {this.props.setParentState({ editingStep: step })}} 
-                onClick={() => {this.props.setParentState({ selectedStep: s, selectedExec: {}, editingStep: null })}}
+                onClick={() => {this.props.setParentState({ selectedStep: s, selectedExec: {}, editingStep: null, addingStep: false })}}
               />
     })
     return (
@@ -65,6 +72,7 @@ class TaskBody extends Component {
               <StepForm 
                 step={this.props.editingStep}
                 onCancel={this.cancelStepForm.bind(this)}
+                onDelete={this.deleteStep.bind(this)}
                 onSubmit={this.submitStepForm.bind(this)} 
               />
             </div>
@@ -73,37 +81,33 @@ class TaskBody extends Component {
       </div>
     )
   }
-  cancelStepForm() {
-    this.props.setParentState({ editingStep: null })
-  }
-  submitStepForm(values) {
-    this.props.dispatch(rest.actions.step.put({id: values.id, task: this.props.task.id}, { body: JSON.stringify(values) }, (err, data) => {
+  deleteStep(step) {
+    let payload = { id: step.id, task: this.props.task.id }
+    this.props.dispatch(rest.actions.step.delete(payload, (err, data) => {
       if (err) return console.error(err)
-      this.props.setParentState({ editingStep: values })
+      this.props.setParentState({ editingStep: null, selectedStep: {}, addingStep: false })
       this.props.dispatch(rest.actions.task.reset())
       this.props.dispatch(rest.actions.task.sync({id:this.props.task.id, steps:true, execs:10}))
     }))
   }
-  componentDidMount() {
-    let selectedStep, selectedExec;
-    this.props.task.steps.forEach((s) => {
-      s.execs.forEach(e => {
-        if (!selectedExec) {
-          selectedExec = e
-          selectedStep = s
-        }
-        if (e.time_start > selectedExec.time_start) {
-          selectedExec = e
-          selectedStep = s
-        }
-      })
-    })
-    if (selectedExec) {
-      this.props.setParentState({
-        selectedStep: selectedStep,
-        selectedExec: selectedExec
-      })
+  cancelStepForm() {
+    this.props.setParentState({ editingStep: null, addingStep: false })
+  }
+  submitStepForm(values) {
+    let adding = values.id === 0
+    let action = rest.actions.step.put
+    let payload = { id: values.id, task: this.props.task.id }
+    if (adding) {
+      action = rest.actions.steps.post
+      delete values.id 
+      payload = { task: this.props.task.id } 
     }
+    this.props.dispatch(action(payload, { body: JSON.stringify(values) }, (err, data) => {
+      if (err) return console.error(err)
+      this.props.setParentState({ editingStep: data, selectedStep: data, addingStep: false })
+      this.props.dispatch(rest.actions.task.reset())
+      this.props.dispatch(rest.actions.task.sync({id:this.props.task.id, steps:true, execs:10}))
+    }))
   }
 }
 
@@ -111,7 +115,8 @@ class Task extends Component {
   state = {
     selectedStep: {},
     selectedExec: {},
-    editingStep: null
+    editingStep: null,
+    addingStep: false
   }
   render() {
     let body = null
@@ -132,14 +137,30 @@ class Task extends Component {
       )
     }
     if (isRestReady(this.props.task)) {
-      body = <TaskBody {...this.props} {...this.state} setParentState={this.setState.bind(this)} task={this.props.task.data} />
+      body = <TaskBody 
+              {...this.props} 
+              {...this.state} 
+              setParentState={this.setState.bind(this)} 
+              task={this.props.task.data} 
+            />
     }
     return (
       <div className="Task">
-        <FilterBar placeholder="Step name" type="step" />
+        <FilterBar 
+          placeholder="Step name" 
+          type="step"
+          onAddClick={this.toggleAddStep.bind(this)}
+         />
         {body} 
       </div>
     )
+  }
+  toggleAddStep() {
+    this.setState({ 
+      addingStep: !this.state.addingStep,
+      editingStep: !this.state.addingStep ? addStep : null, 
+      selectedStep: !this.state.addingStep ? addStep : {} 
+    })
   }
   componentDidMount() {
     this.props.dispatch(rest.actions.task({id:this.props.id, steps:true, execs:10}))
