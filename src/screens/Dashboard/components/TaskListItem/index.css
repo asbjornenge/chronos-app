@@ -21,3 +21,10 @@
 .TaskListItem img:last-of-type:active {
   opacity: 0.5;
 }
+
+.TaskListItem input {
+  border: none;
+  border-bottom: 1px solid var(--background-color);
+  font-size: 16px;
+  margin-right: 10px;
+}

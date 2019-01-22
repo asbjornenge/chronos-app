@@ -8,9 +8,22 @@ import { setTaskStatus } from '../../shared/utils'
 import rest from '../../store/rest'
 import './index.css'
 
+const addTask = {
+  id: 0,
+  name: '',
+  paused: true,
+  steps: []
+}
+
 class Dashboard extends Component {
+  state = {
+    adding: false
+  }
   render() {
-    let tasks = (this.props.tasks.data.data || []) 
+    let _tasks = []
+    if (this.props.tasks.data.data) _tasks = _tasks.concat(this.props.tasks.data.data) 
+    if (this.state.adding) _tasks = [addTask].concat(_tasks)
+    let tasks = _tasks 
       .map(setTaskStatus)
       .filter(t => {
         if (this.props.filter === '') return true
@@ -23,7 +36,13 @@ class Dashboard extends Component {
         return false
       })
       .map(t => {
-        return <TaskListItem key={t.id} task={t} />
+        return (
+          <TaskListItem 
+            key={t.id} 
+            task={t}
+            addTask={this.addTask.bind(this)} 
+          />
+        )
       })
     let error = (this.props.tasks.loading || this.props.tasks.error != null)
     if (error) {
@@ -34,12 +53,24 @@ class Dashboard extends Component {
     }
     return (
       <div className="Dashboard">
-        <FilterBar placeholder="Task name" type="task" />
+        <FilterBar placeholder="Task name" type="task" onAddClick={this.toggleAddTask.bind(this)} />
         <div className={error ? "TaskListItemsError" : "TaskListItems"}>
           {tasks}
         </div> 
       </div>
     )
+  }
+  addTask(name) {
+    if (name.length === 0 || name === ' ') return
+    this.props.dispatch(rest.actions.tasks.post({}, { body: JSON.stringify({name:name}) }, (err, data) => {
+      if (err) return console.error(err)
+      this.props.dispatch(rest.actions.dashboard.reset())
+      this.props.dispatch(rest.actions.dashboard.sync())
+      this.setState({ adding: false }) 
+    }))
+  }
+  toggleAddTask() {
+    this.setState({ adding: !this.state.adding })
   }
   componentDidMount() {
     this.props.dispatch(rest.actions.dashboard.sync())
