@@ -4,6 +4,60 @@
   align-items: center;
   width: 100%;
   border-bottom: 1px solid var(--background-color);
+  cursor: pointer;
+}
+
+.TaskListItem img {
+  height: 20px;
+}
+
+.TaskListItem input {
+  border: none;
+  border-bottom: 1px solid var(--background-color);
+  font-size: 16px;
+}
+
+.TaskListItem .name input {
+  width: 300px;
+  margin-right: 10px;
+}
+
+.TaskListItem .cron {
+  width: 100px;
+  text-align: right;
+}
+
+.TaskListItem .cron input {
+  width: 100px;
+  text-align: right;
+}
+
+.TaskListItem:hover .editbuttons {
+  display: block;
+}
+
+.TaskListItem .editbuttons {
+  width: 100px;
+  text-align: right;
+  display: none;
+}
+
+.TaskListItem .editbuttons img {
+  opacity: 0.3;
+  margin-left: 10px;
+}
+
+.TaskListItem .editbuttons img:hover {
+  opacity: 1;
+}
+
+.TaskListItem .editbuttons img:active {
+  opacity: 0.5;
+}
+
+.TaskListItem .lastrun {
+  width: 120px;
+  text-align: right;
 }
 
 .TaskListItem span {
@@ -11,20 +65,3 @@
   padding: 10px;
 }
 
-.TaskListItem img {
-  height: 20px;
-}
-
-.TaskListItem img:last-of-type {
-  cursor: pointer;
-}
-.TaskListItem img:last-of-type:active {
-  opacity: 0.5;
-}
-
-.TaskListItem input {
-  border: none;
-  border-bottom: 1px solid var(--background-color);
-  font-size: 16px;
-  margin-right: 10px;
-}

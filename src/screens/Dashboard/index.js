@@ -41,6 +41,7 @@ class Dashboard extends Component {
             key={t.id} 
             task={t}
             addTask={this.addTask.bind(this)} 
+            removeTask={this.removeTask.bind(this)} 
           />
         )
       })
@@ -67,6 +68,17 @@ class Dashboard extends Component {
       this.props.dispatch(rest.actions.dashboard.reset())
       this.props.dispatch(rest.actions.dashboard.sync())
       this.setState({ adding: false }) 
+    }))
+  }
+  updateTask(task) {
+    console.log('Updating', task)
+  }
+  removeTask(task) {
+    let payload = { id: task.id }
+    this.props.dispatch(rest.actions.task.delete(payload, (err, data) => {
+      if (err) return console.error(err)
+      this.props.dispatch(rest.actions.dashboard.reset())
+      this.props.dispatch(rest.actions.dashboard.sync())
     }))
   }
   toggleAddTask() {
