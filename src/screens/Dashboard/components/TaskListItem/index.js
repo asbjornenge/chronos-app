@@ -50,15 +50,12 @@ export default class TaskListItem extends Component {
       </div>
     )
   }
-  addTask() {
-    this.props.addTask(this.refs.taskname.value)
-  }
   saveTask(e) {
     e.stopPropagation()
     this.setState({ editing: false })
     let name = this.refs.taskname.value
     let cron = this.refs.taskcron.value
-    console.log(name, cron)
+    this.props.saveTask({ id: this.props.task.id, name: name, cron: cron})
   }
   editTask(e) {
     e.stopPropagation();

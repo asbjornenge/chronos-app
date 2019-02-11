@@ -40,7 +40,7 @@ class Dashboard extends Component {
           <TaskListItem 
             key={t.id} 
             task={t}
-            addTask={this.addTask.bind(this)} 
+            saveTask={this.saveTask.bind(this)} 
             removeTask={this.removeTask.bind(this)} 
           />
         )
@@ -61,9 +61,11 @@ class Dashboard extends Component {
       </div>
     )
   }
-  addTask(name) {
-    if (name.length === 0 || name === ' ') return
-    this.props.dispatch(rest.actions.tasks.post({}, { body: JSON.stringify({name:name}) }, (err, data) => {
+  saveTask(task) {
+    if (task.name.length === 0 || task.name === ' ') return
+    if (task.id !== 0) return this.updateTask(task)
+    delete task.id
+    this.props.dispatch(rest.actions.tasks.post({}, { body: JSON.stringify(task) }, (err, data) => {
       if (err) return console.error(err)
       this.props.dispatch(rest.actions.dashboard.reset())
       this.props.dispatch(rest.actions.dashboard.sync())
@@ -71,7 +73,13 @@ class Dashboard extends Component {
     }))
   }
   updateTask(task) {
-    console.log('Updating', task)
+    this.props.dispatch(rest.actions.task.put({ id: task.id }, { body: JSON.stringify(task) }, (err, data) => {
+      if (err) return console.error(err)
+      this.props.dispatch(rest.actions.task.reset())
+      this.props.dispatch(rest.actions.dashboard.reset())
+      this.props.dispatch(rest.actions.dashboard.sync())
+      this.setState({ adding: false }) 
+    }))
   }
   removeTask(task) {
     let payload = { id: task.id }
