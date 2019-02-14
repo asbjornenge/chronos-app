@@ -44,6 +44,7 @@ class TaskBody extends Component {
                 onClick={() => {this.props.setParentState({ selectedStep: s, selectedExec: {}, editingStep: null, addingStep: false })}}
               />
     })
+    let togglePauseIcon = this.props.task.paused ? 'play' : 'paused'
     return (
       <div className="TaskBody">
         <div className="top">
@@ -51,7 +52,7 @@ class TaskBody extends Component {
           <h1>{this.props.task.name}</h1>
           <div className="spacer"></div>
           <div className="cron">{this.props.task.cron}</div>
-          <img src={`/graphics/paused.svg`} alt="pause" />
+          <img src={`/graphics/${togglePauseIcon}.svg`} alt="pause" onClick={this.togglePause.bind(this)} />
         </div>
         <div className="TaskInfoWrapper">
           <div className="StepList">
@@ -108,6 +109,12 @@ class TaskBody extends Component {
       this.props.dispatch(rest.actions.task.reset())
       this.props.dispatch(rest.actions.task.sync({id:this.props.task.id, steps:true, execs:10}))
     }))
+  }
+  async togglePause() {
+    let res = await fetch(`${window.apihost}/tasks/${this.props.task.id}`, { method: 'PUT', body: JSON.stringify({ paused: !this.props.task.paused}) })
+    if (!res.ok) return
+    this.props.dispatch(rest.actions.task.reset())
+    this.props.dispatch(rest.actions.task.sync({id:this.props.task.id, steps:true, execs:10}))
   }
 }
 
