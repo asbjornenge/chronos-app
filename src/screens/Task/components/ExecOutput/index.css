@@ -1,6 +1,7 @@
 .ExecOutput {
   display: flex;
   flex-direction: column;
+  flex: auto;
 }
 
 .ExecOutput .OutputSelector {
@@ -19,3 +20,13 @@
   background-color: var(--background-color);
 }
 
+.ExecOutput .output {
+  background-color: #002932;
+  display: flex;
+  padding: 10px;
+  flex: auto;
+}
+
+.ExecOutput pre {
+  color: #91A1A1;
+}

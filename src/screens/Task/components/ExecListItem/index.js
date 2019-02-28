@@ -8,7 +8,7 @@ export default class ExecListItem extends Component {
     let date = moment(this.props.exec.time_start).format('DD-MM-YYYY')
     let start = moment(this.props.exec.time_start).format('hh:mm:ss')
     let end = moment(this.props.exec.time_end).format('hh:mm:ss')
-    let diff = moment(this.props.exec.time_start).diff(this.props.exec.time_end, 'seconds')
+    let diff = moment(this.props.exec.time_end).diff(this.props.exec.time_start, 'seconds')
     return (
       <div className={`ExecListItem ${this.props.selected ? 'selected' : ''}`} onClick={this.props.onClick}>
         <img src={`/graphics/${status}.svg`} alt={status} />
