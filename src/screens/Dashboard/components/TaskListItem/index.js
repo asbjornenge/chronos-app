@@ -35,15 +35,15 @@ export default class TaskListItem extends Component {
     }
     return (
       <div className="TaskListItem" onClick={this.openTaskDetails.bind(this)}>
-        <img src={`/graphics/${this.props.task.status}.svg`} alt={this.props.task.status} />
+        <img src={`graphics/${this.props.task.status}.svg`} alt={this.props.task.status} />
         {name}
         <span className="spacer"></span>
         <span className="editbuttons">
           { (editing || adding) &&
-            <img src={`/graphics/save.svg`} alt="save" onClick={this.saveTask.bind(this)} />
+            <img src={`graphics/save.svg`} alt="save" onClick={this.saveTask.bind(this)} />
           }
-          <img src={`/graphics/edit.svg`} alt="edit" onClick={this.editTask.bind(this)} />
-          <img src={`/graphics/trash.svg`} alt="remove" onClick={this.removeTask.bind(this)} />
+          <img src={`graphics/edit.svg`} alt="edit" onClick={this.editTask.bind(this)} />
+          <img src={`graphics/trash.svg`} alt="remove" onClick={this.removeTask.bind(this)} />
         </span>
         {cron} 
         <span className="lastrun">{timestamp ? timestamp.fromNow() : 'Never'}</span>

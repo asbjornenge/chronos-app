@@ -48,11 +48,11 @@ class TaskBody extends Component {
     return (
       <div className="TaskBody">
         <div className="top">
-          <img src={`/graphics/${status}.svg`} alt={status} />
+          <img src={`graphics/${status}.svg`} alt={status} />
           <h1>{this.props.task.name}</h1>
           <div className="spacer"></div>
           <div className="cron">{this.props.task.cron}</div>
-          <img src={`/graphics/${togglePauseIcon}.svg`} alt="pause" onClick={this.togglePause.bind(this)} />
+          <img src={`graphics/${togglePauseIcon}.svg`} alt="pause" onClick={this.togglePause.bind(this)} />
         </div>
         <div className="TaskInfoWrapper">
           <div className="StepList">

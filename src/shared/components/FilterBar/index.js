@@ -19,25 +19,25 @@ class FilterBar extends Component {
           <div 
             className={`filterbutton first ${this.props.filter === 'failing' ? 'selected' : ''}`} 
             onClick={this.updateFilter.bind(this, 'failing')}>
-            <img src="/graphics/failing.svg" alt="failing" />
+            <img src="graphics/failing.svg" alt="failing" />
             <span>FAILING</span>
           </div>
           <div 
             className={`filterbutton ${this.props.filter === 'passing' ? 'selected' : ''}`} 
             onClick={this.updateFilter.bind(this, 'passing')}>
-            <img src="/graphics/passing.svg" alt="passing" />
+            <img src="graphics/passing.svg" alt="passing" />
             <span>PASSING</span>
           </div>
           <div 
             className={`filterbutton ${this.props.filter === 'paused' ? 'selected' : ''}`} 
             onClick={this.updateFilter.bind(this, 'paused')}>
-            <img src="/graphics/paused.svg" alt="paused" />
+            <img src="graphics/paused.svg" alt="paused" />
             <span>PAUSED</span>
           </div>
           <div 
             onClick={this.props.onAddClick}
             className={`filterbutton last add ${this.props.type || ''}`}> 
-            <img src="/graphics/add-white.svg" alt="add" />
+            <img src="graphics/add-white.svg" alt="add" />
           </div>
         </div>
       </div>

@@ -7,7 +7,7 @@ export default class Loading extends Component {
     let imgStyle = this.props.imgStyle || style
     return (
       <div className="Loading" style={{...style}}>
-        <img src="/graphics/rings.svg" alt="loading" style={{...imgStyle}} />
+        <img src="graphics/rings.svg" alt="loading" style={{...imgStyle}} />
       </div>
     )
   }
