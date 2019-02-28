@@ -12,3 +12,7 @@
   padding-right: 30px;
   cursor: pointer;
 }
+
+.App-header img {
+  width: 100px;
+}
