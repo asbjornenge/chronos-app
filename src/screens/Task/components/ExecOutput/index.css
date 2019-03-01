@@ -29,4 +29,7 @@
 
 .ExecOutput pre {
   color: #91A1A1;
+  text-align: left;
+  white-space: pre-wrap;
+  word-wrap: break-word;
 }
