@@ -5,6 +5,7 @@ export default class StepForm extends Component {
   state = {
     name: '',
     command: '',
+    sort_order: 0,
     timeout: 0
   }
   render() {
@@ -31,6 +32,14 @@ export default class StepForm extends Component {
               placeholder="Command to run"
               value={this.state.command || ''} 
               onChange={this.handleChange.bind(this, 'command')} 
+            />
+          </div>
+          <div>
+            <label htmlFor="order">Order</label>
+            <input className="last" type="number" name="order" id="order" required 
+              placeholder="Execution order"
+              value={this.state.sort_order || 0} 
+              onChange={this.handleChange.bind(this, 'sort_order')}
             />
           </div>
           <div>
@@ -69,8 +78,8 @@ export default class StepForm extends Component {
     this.setState(Object.assign(this.state, update))
   }
   setStateFromStep(step) {
-    let { id, name, command, timeout } = step
-    this.setState(Object.assign({id, name, command, timeout}))
+    let { id, name, command, sort_order, timeout } = step
+    this.setState(Object.assign({id, name, command, sort_order, timeout}))
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.step.id !== this.props.step.id)
