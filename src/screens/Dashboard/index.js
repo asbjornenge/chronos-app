@@ -5,6 +5,7 @@ import FilterBar from '../../shared/components/FilterBar'
 import Loading from '../../shared/components/Loading'
 import Error from '../../shared/components/Error'
 import { setTaskStatus } from '../../shared/utils'
+import { useTasks } from '../../shared/hooks'
 import './index.css'
 
 const addTask = {
@@ -18,14 +19,14 @@ export default (props) => {
   const error = false
   const [textFilter, setTextFilter] = useStore('textFilter')
   const [statusFilter, setStatusFilter] = useStore('statusFilter')
-  const [tasks, setTasks] = useStore('tasks')
+  const [tasks, setTasks] = useTasks('tasks')
   const [adding, setAdding] = useState(false)
 
   let _tasks = tasks 
     .map(setTaskStatus)
     .filter(t => {
-      if (textFilter === '') return true
-      if (textFilter === t.status) return true
+      if (statusFilter === '') return true
+      if (statusFilter === t.status) return true
       return false
     })
     .filter(t => {
@@ -38,8 +39,8 @@ export default (props) => {
         <TaskListItem 
           key={t.id} 
           task={t}
-          saveTask={this.saveTask.bind(this)} 
-          removeTask={this.removeTask.bind(this)} 
+          saveTask={() => {}}
+          removeTask={() => {}}
         />
       )
     })
