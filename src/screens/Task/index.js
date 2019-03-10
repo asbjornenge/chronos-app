@@ -23,6 +23,8 @@ const TaskWrapper = (props) => {
         placeholder="Step name" 
         type="step"
         onAddClick={props.toggleAddStep}
+        setStatusFilter={() => {}}
+        setTextFilter={() => {}}
        />
       {props.children}
     </div>
@@ -77,21 +79,26 @@ export default (props) => {
   let steps = _steps.map(s => {
     let selected = selectedStep.id === s.id
     if (selected) execs = s.execs.map(e => {
-      let _selected = props.selectedExec.id === e.id
+      let _selected = selectedExec.id === e.id
       if (_selected) execOutput = <ExecOutput key={e.id+'output'} exec={e} />
       return <ExecListItem
                 key={e.id}
                 exec={e}
                 selected={_selected}
-                onClick={() => {props.setParentState({ selectedExec: e })}}
+                onClick={() => setSelectedExec(e)}
               />
     })
     return <StepListItem 
               key={s.id} 
               step={s} 
               selected={selected}
-              editStep={(step) => {props.setParentState({ editingStep: step })}} 
-              onClick={() => {props.setParentState({ selectedStep: s, selectedExec: {}, editingStep: null, addingStep: false })}}
+              editStep={(step) => {setEditingStep(step)}}
+              onClick={() => {
+                setSelectedStep(s)
+                setSelectedExec({})
+                setEditingStep(null)
+                setAddingStep(false)
+              }}
             />
   })
   let togglePauseIcon = task.paused ? 'play' : 'paused'
