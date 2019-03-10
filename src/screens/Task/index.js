@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { useStore } from 'react-hookstore'
 import { useTasks } from '../../shared/hooks'
 import * as api from '../../shared/api'
 import FilterBar from '../../shared/components/FilterBar'
