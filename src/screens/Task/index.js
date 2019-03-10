@@ -23,9 +23,11 @@ const TaskWrapper = (props) => {
       <FilterBar 
         placeholder="Step name" 
         type="step"
+        textFilter={props.textFilter}
+        setTextFilter={props.setTextFilter}
+        statusFilter={props.statusFilter}
+        setStatusFilter={props.setStatusFilter}
         onAddClick={props.toggleAddStep}
-        setStatusFilter={() => {}}
-        setTextFilter={() => {}}
        />
       {props.children}
     </div>
@@ -33,11 +35,13 @@ const TaskWrapper = (props) => {
 }
 
 export default (props) => {
-  let [selectedStep, setSelectedStep] = useState({})
-  let [selectedExec, setSelectedExec] = useState({})
-  let [editingStep, setEditingStep] = useState(null)
-  let [addingStep, setAddingStep] = useState(false)
-  let [tasks, setTasks] = useTasks() 
+  const [selectedStep, setSelectedStep] = useState({})
+  const [selectedExec, setSelectedExec] = useState({})
+  const [editingStep, setEditingStep] = useState(null)
+  const [addingStep, setAddingStep] = useState(false)
+  const [textFilter, setTextFilter] = useState('')
+  const [statusFilter, setStatusFilter] = useState('')
+  const [tasks, setTasks] = useTasks() 
   let loading = false 
   let error = false 
 
@@ -114,7 +118,16 @@ export default (props) => {
   }
 
   return (
-    <TaskWrapper toggleAddStep={toggleAddStep}>
+    <TaskWrapper 
+      textFilter={textFilter}
+      setTextFilter={setTextFilter}
+      statusFilter={statusFilter}
+      setStatusFilter={(status) => {
+        let _status = status === statusFilter ? '' : status
+        setStatusFilter(_status)
+        }}
+      toggleAddStep={toggleAddStep}
+    >
       <div className="TaskBody">
         <div className="top">
           <img src={`graphics/${status}.svg`} alt={status} />
