@@ -6,6 +6,7 @@ import Loading from '../../shared/components/Loading'
 import Error from '../../shared/components/Error'
 import { setTaskStatus } from '../../shared/utils'
 import { useTasks } from '../../shared/hooks'
+import * as api from '../../shared/api'
 import './index.css'
 
 const addTask = {
@@ -22,7 +23,25 @@ export default (props) => {
   const [tasks, setTasks] = useTasks('tasks')
   const [adding, setAdding] = useState(false)
 
-  let _tasks = tasks 
+  let saveTask = async (updatedTask) => {
+    let task = await api.saveTask(updatedTask)
+    task = await api.getTask(task.id, '?steps=true&execs=1') 
+    setAdding(false)
+    if (!updatedTask.id)
+      setTasks([task].concat(tasks))
+    else
+      setTasks(tasks.map(t => t.id === task.id ? task : t))
+  }
+
+  let removeTask = async (task) => {
+    setAdding(false)
+    await api.removeTask(task)
+    setTasks(tasks.filter(t => t.id !== task.id))
+  }
+
+  let _tasks = tasks
+  if (adding) _tasks = [addTask].concat(_tasks)
+  let __tasks = _tasks 
     .map(setTaskStatus)
     .filter(t => {
       if (statusFilter === '') return true
@@ -39,12 +58,11 @@ export default (props) => {
         <TaskListItem 
           key={t.id} 
           task={t}
-          saveTask={() => {}}
-          removeTask={() => {}}
+          saveTask={saveTask}
+          removeTask={removeTask}
         />
       )
     })
-  if (adding) _tasks = [addTask].concat(_tasks)
 //  let error = (this.props.tasks.loading || this.props.tasks.error != null)
   if (error) {
     _tasks = <Loading style={{flex:'auto', width: 200, height: 200}} />
@@ -68,7 +86,7 @@ export default (props) => {
         onAddClick={() => setAdding(!adding)} 
       />
       <div className={error ? "TaskListItemsError" : "TaskListItems"}>
-        {_tasks}
+        {__tasks}
       </div> 
     </div>
   )
