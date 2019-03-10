@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useStore } from 'react-hookstore'
 import { useTasks } from '../../shared/hooks'
+import * as api from '../../shared/api'
 import FilterBar from '../../shared/components/FilterBar'
 import Loading from '../../shared/components/Loading'
 import Error from '../../shared/components/Error'
@@ -41,7 +42,10 @@ export default (props) => {
   let error = false 
 
   let toggleAddStep = () => {
+    let isAdding = !addingStep
     setAddingStep(!addingStep)
+    setEditingStep(isAdding ? addStep : null)
+    setSelectedStep(isAdding ? addStep : {})
   }
 
   let task = tasks.reduce((selected, t) => {
@@ -70,7 +74,7 @@ export default (props) => {
       </TaskWrapper>
     )
   }
-  // TODO: Make a path thing instead of that simple h1 - possible to navigate back in stack
+
   let status = getTaskStatus(task)
   let execs = []
   let execOutput = null
@@ -102,6 +106,13 @@ export default (props) => {
             />
   })
   let togglePauseIcon = task.paused ? 'play' : 'paused'
+  let togglePause = async () => {
+    let res = await api.toggleTaskPause(task)
+    if (!res.ok) return console.error(res.message) 
+    task.paused = !task.paused 
+    setTasks(tasks.map(t => t.id === task.id ? task : t))
+  }
+
   return (
     <TaskWrapper toggleAddStep={toggleAddStep}>
       <div className="TaskBody">
@@ -110,29 +121,52 @@ export default (props) => {
           <h1>{task.name}</h1>
           <div className="spacer"></div>
           <div className="cron">{task.cron}</div>
-          <img src={`graphics/${togglePauseIcon}.svg`} alt="pause" onClick={() => this.togglePause.bind(this)} />
+          <img src={`graphics/${togglePauseIcon}.svg`} alt="pause" onClick={togglePause} />
         </div>
         <div className="TaskInfoWrapper">
           <div className="StepList">
             {steps}
           </div>
-          { !props.editingStep &&
+          { !editingStep &&
             <div className="ExecList">
               {execs}
             </div>
           }
-          { !props.editingStep &&
+          { !editingStep &&
             <div className="ExecOutput">
               {execOutput}
             </div>
           }
-          { props.editingStep &&
+          { editingStep &&
             <div className="StepEdit">
               <StepForm 
-                step={props.editingStep}
-                onCancel={this.cancelStepForm.bind(this)}
-                onDelete={this.deleteStep.bind(this)}
-                onSubmit={this.submitStepForm.bind(this)} 
+                step={editingStep}
+                onCancel={() => {
+                  setEditingStep(null)
+                  setAddingStep(false)
+                }}
+                onDelete={async (step) => {
+                  await api.removeStep(step, task)
+                  task.steps = task.steps.filter(s => s.id !== step.id)
+                  setEditingStep(null)
+                  setSelectedStep({})
+                  setAddingStep(false)
+                }}
+                onSubmit={async (values, step) => {
+                  let adding = values.id === 0
+                  let _step = await api.saveStep(values, task)
+                  if (adding) {
+                    _step.execs = []
+                    task.steps.push(_step)
+                  } else {
+                    _step.execs = step.execs
+                    task.steps = task.steps.map(s => s.id === _step.id ? _step : s)
+                  }
+                  setTasks(tasks.map(t => t.id === task.id ? task : t))
+                  setEditingStep(_step)
+                  setSelectedStep(_step)
+                  setAddingStep(false)
+                }} 
               />
             </div>
           }
@@ -141,34 +175,6 @@ export default (props) => {
     </TaskWrapper>
   )
 }
-//  deleteStep(step) {
-//    let payload = { id: step.id, task: task.id }
-//    props.dispatch(rest.actions.step.delete(payload, (err, data) => {
-//      if (err) return console.error(err)
-//      props.setParentState({ editingStep: null, selectedStep: {}, addingStep: false })
-//      props.dispatch(rest.actions.task.reset())
-//      props.dispatch(rest.actions.task.sync({id:task.id, steps:true, execs:10}))
-//    }))
-//  }
-//  cancelStepForm() {
-//    props.setParentState({ editingStep: null, addingStep: false })
-//  }
-//  submitStepForm(values) {
-//    let adding = values.id === 0
-//    let action = rest.actions.step.put
-//    let payload = { id: values.id, task: task.id }
-//    if (adding) {
-//      action = rest.actions.steps.post
-//      delete values.id 
-//      payload = { task: task.id } 
-//    }
-//    props.dispatch(action(payload, { body: JSON.stringify(values) }, (err, data) => {
-//      if (err) return console.error(err)
-//      props.setParentState({ editingStep: data, selectedStep: data, addingStep: false })
-//      props.dispatch(rest.actions.task.reset())
-//      props.dispatch(rest.actions.task.sync({id:task.id, steps:true, execs:10}))
-//    }))
-//  }
 //  async togglePause() {
 //    let res = await fetch(`${window.apihost}/tasks/${task.id}`, { method: 'PUT', body: JSON.stringify({ paused: !task.paused}) })
 //    if (!res.ok) return
@@ -177,26 +183,3 @@ export default (props) => {
 //  }
 //}
 
-//  toggleAddStep() {
-//    this.setState({ 
-//      addingStep: !this.state.addingStep,
-//      editingStep: !this.state.addingStep ? addStep : null, 
-//      selectedStep: !this.state.addingStep ? addStep : {} 
-//    })
-//  }
-//  componentDidMount() {
-//    props.dispatch(rest.actions.task({id:props.id, steps:true, execs:10}))
-//  }
-
-//export default connect(
-//  (state) => {
-//    return {
-//      task: state.task
-//    }
-//  },
-//  (dispatch) => {
-//    return {
-//      dispatch: dispatch
-//    }
-//  }
-//)(Task)

@@ -70,7 +70,7 @@ export default class StepForm extends Component {
     if (!this.state.command || this.state.command.length === 0) return
     if (!this.state.timeout) return
     this._readyForProps = true
-    this.props.onSubmit(this.state)
+    this.props.onSubmit(this.state, this.props.step)
   }
   handleChange(field, e) {
     let update = {}

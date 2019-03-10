@@ -37,7 +37,42 @@ export async function removeTask(task) {
     .then(res => res.json())
 }
 
-export async function getSteps(task) {
-  return await fetch(`${window.apihost}/tasks/${task.id}/steps`) 
+export async function toggleTaskPause(task) {
+  return await fetch(`${window.apihost}/tasks/${task.id}`, 
+    { 
+      method: 'PUT', 
+      body: JSON.stringify({ paused: !task.paused}) 
+    })
+}
+
+export async function saveStep(step, task) {
+  if (step.id === 0) return await addStep(step, task)  
+  else return await updateStep(step, task)
+}
+
+export async function addStep(step, task) {
+  delete step.id
+  return await fetch(`${window.apihost}/tasks/${task.id}/steps`, 
+    { 
+      method: 'POST', 
+      body: JSON.stringify(step) 
+    })
+    .then(res => res.json())
+}
+
+export async function updateStep(step, task) {
+  return await fetch(`${window.apihost}/tasks/${task.id}/steps/${step.id}`, 
+    { 
+      method: 'PUT',
+      body: JSON.stringify(step)
+    })
+    .then(res => res.json())
+}
+
+export async function removeStep(step, task) {
+  return await fetch(`${window.apihost}/tasks/${task.id}/steps/${step.id}`, 
+    { 
+      method: 'DELETE'
+    })
     .then(res => res.json())
 }
