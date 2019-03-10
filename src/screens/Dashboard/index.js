@@ -20,7 +20,7 @@ export default (props) => {
   const error = false
   const [textFilter, setTextFilter] = useStore('textFilter')
   const [statusFilter, setStatusFilter] = useStore('statusFilter')
-  const [tasks, setTasks] = useTasks('tasks')
+  const [tasks, setTasks] = useTasks()
   const [adding, setAdding] = useState(false)
 
   let saveTask = async (updatedTask) => {

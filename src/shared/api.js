@@ -1,3 +1,5 @@
+window.apihost = window.location.hostname === 'localhost' ? `http://${window.location.hostname}:3001` : './api'
+
 export async function getTask(id, params='') {
   return await fetch(`${window.apihost}/tasks/${id}${params}`) 
     .then(res => res.json())
