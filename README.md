@@ -20,9 +20,9 @@ docker run -p 8080:8080 -it asbjornenge/chronos-app:latest
 
 ### Tasks
 
-Setting up tasks are fairly staightforward. Give the task a name and set a cron or it to run.
+Setting up tasks are fairly staightforward. Give the task a `name` and set a `cron` for it to run.
 
-You need to "unpause" the tasks before it is sceduled to run. You do that by clicking the top right icon from task details (click the task to get there). 
+You need to `unpause` the tasks before it is sceduled to run. You do that by clicking the top right icon from task details (click the task to get there). 
 
 ### Steps
 
@@ -44,6 +44,11 @@ Order   : 1
 Timeout : 10000
 ```
 
-**NB!** Steps are executed in the `api` container. It's `alpine` based and contains very few tools. However, it does contain the `docker` cli. Which means you can run most anything :rocket:
+**NB!** Steps are executed in the `api` container. It's `alpine` based and contains very few tools. However, it does contain the `docker` cli. Which means you can run most anything :rocket: It does not however contain a docker daemon, so be sure to specify `-H tcp://docker-host:port` for the actual execution to take place :+1:
+
+Other relevant steps to add to the example above could be;
+
+* Upload to S3
+* Cleanup
 
 enjoy. 
