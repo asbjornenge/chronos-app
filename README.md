@@ -22,7 +22,7 @@ docker run -p 8080:8080 -it asbjornenge/chronos-app:latest
 
 Setting up tasks are fairly staightforward. Give the task a `name` and set a `cron` for it to run.
 
-You need to `unpause` the tasks before it is sceduled to run. You do that by clicking the top right icon from task details (click the task to get there). 
+**NB!** You need to `unpause` the tasks before it is sceduled to run. You do that by clicking the top right icon from task details (click the task to get there). 
 
 ### Steps
 
