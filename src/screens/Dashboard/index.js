@@ -24,7 +24,7 @@ export default (props) => {
 
   let saveTask = async (updatedTask) => {
     let task = await api.saveTask(updatedTask)
-    task = await api.getTask(task.id, '?steps=true&execs=1') 
+    task = await api.getTask(task.id, '?steps=true&execs=10') 
     setAdding(false)
     if (!updatedTask.id)
       setTasks([task].concat(tasks))
