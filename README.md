@@ -26,7 +26,7 @@ Setting up tasks are fairly staightforward. Give the task a `name` and set a `cr
 
 ### Steps
 
-Steps are require a bit more input:
+Steps require a bit more input:
 
 ```
 Name    : Name of the step
@@ -39,7 +39,7 @@ Example:
 
 ```
 Name    : Dump database
-Command : docker -H tcp://docker.host:4243 run --rm -v /var/lib/docker/data/backup:/backup postgres:9.6 pg_dump -h postgres -U postgres demo -f /backup/demo.sql
+Command : docker -H tcp://docker-host:4243 run --rm -v /var/lib/docker/data/backup:/backup postgres:9.6 pg_dump -h postgres -U postgres demo -f /backup/demo.sql
 Order   : 1
 Timeout : 10000
 ```
