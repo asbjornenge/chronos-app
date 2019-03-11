@@ -1,12 +1,15 @@
 import React, { Component } from 'react'
 import './index.css'
 
+const DEFAULT_SORT_ORDER = 1
+const DEFAULT_TIMEOUT = 5000
+
 export default class StepForm extends Component {
   state = {
     name: '',
     command: '',
-    sort_order: 0,
-    timeout: 0
+    sort_order: DEFAULT_SORT_ORDER,
+    timeout: DEFAULT_TIMEOUT
   }
   render() {
     return (
@@ -38,7 +41,7 @@ export default class StepForm extends Component {
             <label htmlFor="order">Order</label>
             <input className="last" type="number" name="order" id="order" required 
               placeholder="Execution order"
-              value={this.state.sort_order || 0} 
+              value={this.state.sort_order || DEFAULT_SORT_ORDER} 
               onChange={this.handleChange.bind(this, 'sort_order')}
             />
           </div>
@@ -46,7 +49,7 @@ export default class StepForm extends Component {
             <label htmlFor="timeout">Timeout</label>
             <input className="last" type="number" name="timeout" id="timeout" required 
               placeholder="Execution timeout"
-              value={this.state.timeout || 0} 
+              value={this.state.timeout || DEFAULT_TIMEOUT} 
               onChange={this.handleChange.bind(this, 'timeout')}
             />
           </div>
@@ -79,6 +82,8 @@ export default class StepForm extends Component {
   }
   setStateFromStep(step) {
     let { id, name, command, sort_order, timeout } = step
+    if (!sort_order) sort_order = this.props.numSteps+1
+    if (!timeout) timeout = DEFAULT_TIMEOUT 
     this.setState(Object.assign({id, name, command, sort_order, timeout}))
   }
   componentWillReceiveProps(nextProps) {

@@ -157,6 +157,7 @@ export default (props) => {
           { editingStep &&
             <div className="StepEdit">
               <StepForm 
+                numSteps={task.steps.length}
                 step={editingStep}
                 onCancel={() => {
                   setEditingStep(null)
