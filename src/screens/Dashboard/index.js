@@ -17,7 +17,6 @@ const addTask = {
 }
 
 export default (props) => {
-  const error = false
   const [textFilter, setTextFilter] = useStore('textFilter')
   const [statusFilter, setStatusFilter] = useStore('statusFilter')
   const [tasks, setTasks] = useTasks()
@@ -63,12 +62,11 @@ export default (props) => {
         />
       )
     })
-//  let error = (this.props.tasks.loading || this.props.tasks.error != null)
-  if (error) {
-    _tasks = <Loading style={{flex:'auto', width: 200, height: 200}} />
+  if (tasks.loading) {
+    __tasks = <Loading style={{flex:'auto', width: 200, height: 200}} />
   }
-  if (error) {
-    _tasks = <Error message={this.props.tasks.error.message} />
+  if (tasks.error) {
+    __tasks = <Error message={tasks.error} />
   }
 
   return (
@@ -85,7 +83,7 @@ export default (props) => {
         }}
         onAddClick={() => setAdding(!adding)} 
       />
-      <div className={error ? "TaskListItemsError" : "TaskListItems"}>
+      <div className={(tasks.error || tasks.loading) ? "TaskListItemsError" : "TaskListItems"}>
         {__tasks}
       </div> 
     </div>

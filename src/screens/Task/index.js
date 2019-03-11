@@ -41,8 +41,6 @@ export default (props) => {
   const [textFilter, setTextFilter] = useState('')
   const [statusFilter, setStatusFilter] = useState('')
   const [tasks, setTasks] = useTasks() 
-  let loading = false 
-  let error = false 
 
   let toggleAddStep = () => {
     let isAdding = !addingStep
@@ -57,9 +55,7 @@ export default (props) => {
     return selected
   }, null)
 
-  if (!task) loading = true
-
-  if (loading) {
+  if (tasks.loading) {
     return (
       <TaskWrapper toggleAddStep={toggleAddStep}>
         <div className="TaskError">
@@ -68,11 +64,20 @@ export default (props) => {
       </TaskWrapper>
     )
   }
-  if (error) {
+  if (tasks.error) {
     return (
       <TaskWrapper toggleAddStep={toggleAddStep}>
         <div className="TaskError">
-          <Error message={task.error.message} />
+          <Error message={tasks.error} />
+        </div>
+      </TaskWrapper>
+    )
+  }
+  if (!task) {
+    return (
+      <TaskWrapper toggleAddStep={toggleAddStep}>
+        <div className="TaskError">
+          <Error message="404 Task not found" />
         </div>
       </TaskWrapper>
     )
