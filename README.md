@@ -6,7 +6,7 @@ In Chronos you can add tasks to run at specific times defined in [cron](https://
 
 Chronos is split into two components; an [app](https://github.com/asbjornenge/chronos-app) (this repo) and an [api](https://github.com/asbjornenge/chronos-api).
 
-You need to run both to have an operational application. For instruction on how to run the API service, check out the api repo :point-up:. 
+You need to run both to have an operational application. For instruction on how to run the API service, check out the api repo :point-up:
 
 ![Screenshot-1](https://raw.githubusercontent.com/asbjornenge/chronos-app/master/screenshots/Chronos-1.png)
 
