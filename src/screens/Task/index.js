@@ -88,6 +88,7 @@ export default (props) => {
   let execOutput = null
   let _steps = [].concat(task.steps)
   if (addingStep) _steps.push(addStep)
+  _steps.sort((a,b) => (a.sort_order > b.sort_order) ? 1 : -1)
   let steps = _steps.map(s => {
     let selected = selectedStep.id === s.id
     if (selected) execs = s.execs.map(e => {
