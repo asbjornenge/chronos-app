@@ -20,6 +20,20 @@ export async function addTask(task) {
     .then(res => res.json())
 }
 
+export async function runTask(task) {
+  return await fetch(`${window.apihost}/run/${task.id}`, 
+  { 
+    method: 'GET', 
+  })
+}
+
+export async function runStep(step) {
+  return await fetch(`${window.apihost}/run/${step.task}/steps/${step.id}`, 
+  { 
+    method: 'GET', 
+  })
+}
+
 export async function updateTask(task) {
   return await fetch(`${window.apihost}/tasks/${task.id}`, 
     { 

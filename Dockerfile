@@ -1,4 +1,4 @@
-FROM node:11-alpine
+FROM node:12.22.8-alpine3.14
 RUN npm install -g node-static
 RUN mkdir /app
 ADD src/ /app/src

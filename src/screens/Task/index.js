@@ -41,6 +41,8 @@ export default (props) => {
   const [textFilter, setTextFilter] = useState('')
   const [statusFilter, setStatusFilter] = useState('')
   const [tasks, setTasks] = useTasks() 
+  const [runningStep, setRunningStep] = useState('')
+  const [runningTask, setRunningTask] = useState(false)
 
   let toggleAddStep = () => {
     let isAdding = !addingStep
@@ -89,7 +91,9 @@ export default (props) => {
   let _steps = [].concat(task.steps)
   if (addingStep) _steps.push(addStep)
   _steps.sort((a,b) => (a.sort_order > b.sort_order) ? 1 : -1)
-  let steps = _steps.map(s => {
+
+  let steps = _steps.sort((a,b) => (a.sort_order > b.sort_order) ? 1 : -1).map(s => {
+    let running = runningStep === s.id ? true : false
     let selected = selectedStep.id === s.id
     if (selected) execs = s.execs.map(e => {
       let _selected = selectedExec.id === e.id
@@ -106,12 +110,14 @@ export default (props) => {
               step={s} 
               selected={selected}
               editStep={(step) => {setEditingStep(step)}}
+              runStep={(step) => {OnRunStep(step)}}
               onClick={() => {
                 setSelectedStep(s)
                 setSelectedExec({})
                 setEditingStep(null)
                 setAddingStep(false)
               }}
+              running = {running}
             />
   })
   let togglePauseIcon = task.paused ? 'play' : 'paused'
@@ -120,6 +126,22 @@ export default (props) => {
     if (!res.ok) return console.error(res.message) 
     task.paused = !task.paused 
     setTasks(tasks.map(t => t.id === task.id ? task : t))
+  }
+  let OnRunStep = async(step) => {
+    setRunningStep(step.id)
+    await api.runStep(step)
+    setRunningStep('')
+    let newtask = await api.getTask(step.task, '?steps=true&execs=10')
+    setTasks(tasks.map(t => t.id === step.task ? newtask : t)) 
+  }
+
+  let OnRun = async() => {
+    setRunningTask(true)
+    let res = await api.runTask(task)
+    setRunningTask(false)
+    let newtask = await api.getTask(task.id, '?steps=true&execs=10')
+    setTasks(tasks.map(t => t.id === task.id ? newtask : t)) 
+    if (!res.ok) return console.error(res.message)
   }
 
   return (
@@ -138,6 +160,12 @@ export default (props) => {
           <img src={`graphics/${status}.svg`} alt={status} />
           <h1>{task.name}</h1>
           <div className="spacer"></div>
+          {
+            runningTask ? 
+            <img src={`graphics/wait.svg`} alt="wait" className='runicon' />:
+            <img src={`graphics/run.svg`} alt="run" onClick={OnRun} className='runicon'/>
+          }
+          
           <div className="cron">{task.cron}</div>
           <img src={`graphics/${togglePauseIcon}.svg`} alt="pause" onClick={togglePause} />
         </div>

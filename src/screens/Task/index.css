@@ -56,6 +56,9 @@
 .TaskBody .TaskInfoWrapper > div:first-of-type {
   border-right: none; 
 }
+.runicon {
+  margin-right: 15px;
+}
 
 .TaskBody .TaskInfoWrapper div.StepEdit {
   border-left: 1px solid var(--border-color);
