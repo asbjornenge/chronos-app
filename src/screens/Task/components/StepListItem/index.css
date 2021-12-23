@@ -9,7 +9,7 @@
 .StepListItem:hover {
   transform: scale(1.01);
   background-color: #fefefe;
-  border: 1px solid var(--background-color)
+  border: 1px solid var(--border-color)
 }
 
 .StepListItem:last-of-type {
