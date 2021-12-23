@@ -59,3 +59,35 @@
   border-top: 0;
 }
 
+.btn {
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  min-width:70px;
+}
+
+.btn:hover {
+  transform: scale(1.2);
+}
+
+.btn-green {
+  background-color: var(--color-green-light);
+  border-color: var(--color-green);
+  border: 2px solid var(--color-green);
+  border-radius: 5px;
+}
+
+.btn-red {
+  background-color: #ff6363;
+  border-color: #a63f3f;
+  border: 2px solid #a63f3f;
+  border-radius: 5px;
+}
+
+.btn-orange {
+  background-color: #ff8d4f;
+  border-color: #b86437;
+  border: 2px solid #b86437;
+  border-radius: 5px;
+}

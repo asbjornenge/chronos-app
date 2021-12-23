@@ -18,10 +18,10 @@ export default class StepListItem extends Component {
         {
           this.props.selected &&
           !this.props.running ? 
-          <img className='run' src={`graphics/play.svg`} alt="run" onClick={this.runStep.bind(this)} />: null
+          <img className='run img-clickable' src={`graphics/play.svg`} alt="run" onClick={this.runStep.bind(this)} />: null
         }
         { this.props.selected &&
-          <img className="details" src={`graphics/details.svg`} alt="details" onClick={this.editStep.bind(this)} />
+          <img className="details img-clickable" src={`graphics/details.svg`} alt="details" onClick={this.editStep.bind(this)} />
         }
       </div>
     )

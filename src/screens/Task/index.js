@@ -164,11 +164,11 @@ export default (props) => {
           {
             runningTask ? 
             <img src={`graphics/wait.svg`} alt="wait" className='runicon' />:
-            <img src={`graphics/run.svg`} alt="run" onClick={OnRun} className='runicon'/>
+            <img src={`graphics/run.svg`} alt="run" onClick={OnRun} className='runicon img-clickable'/>
           }
           
           <div className="cron">{task.cron}</div>
-          <img src={`graphics/${togglePauseIcon}.svg`} alt="pause" onClick={togglePause} />
+          <img src={`graphics/${togglePauseIcon}.svg`} alt="pause" onClick={togglePause} className='img-clickable'/>
         </div>
         <div className="TaskInfoWrapper">
           <div className="StepList">

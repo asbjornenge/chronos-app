@@ -6,6 +6,12 @@
   cursor: pointer;
 }
 
+.StepListItem:hover {
+  transform: scale(1.01);
+  background-color: #fefefe;
+  border: 1px solid var(--background-color)
+}
+
 .StepListItem:last-of-type {
   border-bottom: none;
 }
@@ -31,4 +37,8 @@
 
 .StepListItem img.details {
   padding-right: 10px;
+}
+
+.img-clickable:hover {
+  transform: scale(1.2);
 }
