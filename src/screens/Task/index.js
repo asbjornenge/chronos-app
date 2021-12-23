@@ -129,7 +129,7 @@ export default (props) => {
   }
   let OnRunStep = async(step) => {
     setRunningStep(step.id)
-    await api.runStep(step)
+    let res = await api.runStep(step)
     setRunningStep('')
     let newtask = await api.getTask(step.task, '?steps=true&execs=10')
     setTasks(tasks.map(t => t.id === step.task ? newtask : t)) 
