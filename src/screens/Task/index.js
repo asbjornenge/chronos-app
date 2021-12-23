@@ -133,13 +133,12 @@ export default (props) => {
     setRunningStep('')
     let newtask = await api.getTask(step.task, '?steps=true&execs=10')
     setTasks(tasks.map(t => t.id === step.task ? newtask : t)) 
+    if (!res.ok) return console.error(res.message)
   }
 
   let OnRun = async() => {
-    console.log("Starting this badboi")
     setRunningTask(true)
     let res = await api.runTask(task)
-    console.log("Done running...")
     setRunningTask(false)
     let newtask = await api.getTask(task.id, '?steps=true&execs=10')
     setTasks(tasks.map(t => t.id === task.id ? newtask : t)) 
@@ -231,4 +230,3 @@ export default (props) => {
 //    props.dispatch(rest.actions.task.sync({id:task.id, steps:true, execs:10}))
 //  }
 //}
-
