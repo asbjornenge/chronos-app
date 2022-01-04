@@ -1,18 +1,13 @@
 import React, { Component } from 'react'
 import './index.css'
-
-const DEFAULT_SORT_ORDER = 1
-const DEFAULT_TIMEOUT = 5000
-
+import { toast } from 'react-toastify';
 export default class SecretForm extends Component {
   state = {
     name: '',
-    secrettype: '' || "string", 
     secretvalue: '',
   }
 
   render() {
-    console.log("state",this.state)
     return (
       <div className="SecretForm">
         { !this.props.secret.name &&
@@ -31,33 +26,33 @@ export default class SecretForm extends Component {
             />
           </div>
           <div>
-            <label htmlFor="secrettype">Type</label>
-            <input type="text" name="secrettype" id="secrettype" required 
-              placeholder="Type"
-              value={this.state.secrettype || ''} 
-              onChange={this.handleChange.bind(this, 'command')} 
+            <label htmlFor="secretvalue">Value</label>
+            <input type="text" name="secretvalue" id="secretvalue" required 
+              placeholder="Value"
+              value={this.state.secretvalue} 
+              onChange={this.handleChange.bind(this, 'secretvalue')} 
             />
           </div>
+          <br/>
           <div>
-            <label htmlFor="order">Order</label>
-            <input className="last" type="number" name="order" id="order" required 
-              placeholder="Execution order"
-              value={this.state.sort_order || DEFAULT_SORT_ORDER} 
-              onChange={this.handleChange.bind(this, 'sort_order')}
-            />
-          </div>
-          <div>
-            <label htmlFor="timeout">Timeout</label>
-            <input className="last" type="number" name="timeout" id="timeout" required 
-              placeholder="Execution timeout"
-              value={this.state.timeout || DEFAULT_TIMEOUT} 
-              onChange={this.handleChange.bind(this, 'timeout')}
-            />
+            <label htmlFor="usage">Usage</label>
+            <span name="usage" id="clickable" onClick={() => {
+                toast.promise(navigator.clipboard.writeText('{{' + this.state.name + '}}'),
+                {
+                  pending: "Copying...",
+                  success: "Copied to clipboard!",
+                  error: "Failed to copy to clipboard!"
+                })
+              }}>
+              {
+                '{{' + this.state.name + '}}'
+              }
+            </span>
           </div>
         </form>
         <div className="buttons">
           <button className='btn btn-green' onClick={this.submit.bind(this)}>Save</button>
-          <button className='btn btn-orange' onClick={this.props.onCancel}>Cancel</button>
+          <button className='btn btn-orange' onClick={this.cancel.bind(this)}>Cancel</button>
           <div className="spacer"></div>
           { this.props.secret.id !== 0 &&
           <button className='btn btn-red' onClick={this.delete.bind(this)}>Delete</button>
@@ -71,10 +66,13 @@ export default class SecretForm extends Component {
   }
   submit() {
     if (!this.state.name || this.state.name.length === 0) return
-    if (!this.state.command || this.state.command.length === 0) return
-    if (!this.state.timeout) return
+    if (!this.state.secretvalue || this.state.secretvalue.length === 0) return
     this._readyForProps = true
     this.props.onSubmit(this.state, this.props.secret)
+  }
+  
+  cancel() {
+    this.props.onCancel(this.props.secret)
   }
   handleChange(field, e) {
     let update = {}
@@ -82,15 +80,15 @@ export default class SecretForm extends Component {
     this.setState(Object.assign(this.state, update))
   }
   setStateFromSecret(secret) {
-    let { id, name, secrettype, secretvalue } = secret
-    this.setState(Object.assign({id, name, secrettype, secretvalue}))
+    let { id, name } = secret
+    let secretvalue = "UNCHANGED"
+    this.setState(Object.assign({id, name, secretvalue}))
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.secret.id !== this.props.secret.id)
       this.setStateFromSecret(nextProps.secret)
   }
   componentDidMount() {
-    console.log("Props", this.props)
     this.setStateFromSecret(this.props.secret)
   } 
 }

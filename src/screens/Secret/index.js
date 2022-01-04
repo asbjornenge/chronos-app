@@ -5,11 +5,10 @@ import Loading from '../../shared/components/Loading'
 import Error from '../../shared/components/Error'
 import SecretListItem from './components/SecretListItem'
 import SecretForm from './components/SecretForm'
-import ExecListItem from './components/ExecListItem'
-import ExecOutput from './components/ExecOutput'
 import './index.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLock, faCogs, faCog } from '@fortawesome/free-solid-svg-icons'
+import * as api from '../../shared/api'
 
 const addSecret = {
   id: -1,
@@ -17,7 +16,7 @@ const addSecret = {
 
 const SecretWrapper = (props) => {
   return (
-    <div className="Task">
+    <div className="Secret">
       <FilterBar 
         placeholder="Secret name" 
         type="secret"
@@ -46,6 +45,8 @@ export default (props) => {
     setAddingSecret(!addingSecret)
     setEditingSecret(isAdding ? addSecret : null)
     setSelectedSecret(isAdding ? addSecret : {})
+    //removing any non-submitted secrets.
+    setSecrets(_secrets.filter(s => s.id !== -1))
   }
 
   if (addingSecret) _secrets.push(addSecret)
@@ -55,7 +56,7 @@ export default (props) => {
       key={s.id}
       secret={s}
       selected={selected}
-      editSecret={(secret) => {setEditingSecret(secret)}}
+      editSecret={() => {setEditingSecret(s)}}
       onClick={() => {
         setSelectedSecret(s)
         setEditingSecret(s)
@@ -92,8 +93,36 @@ export default (props) => {
             <SecretForm
               numSecrets={_secrets.length}
               secret={editingSecret}
-              onCancel={() => {
+              onCancel={(secret) => {
                 setEditingSecret(null)
+                setAddingSecret(false)
+                console.log(secret)
+
+                if (secret.id === -1) {
+                  setSecrets(_secrets.filter(s => s.id !== secret.id ))
+                }
+              }}
+              onDelete={async (secret) => {
+                await api.removeSecret(secret)
+                
+                setSecrets(_secrets.filter(s => s.id !== secret.id))
+                //todo actually delete the secret
+                setEditingSecret(null)
+                setSelectedSecret({})
+                setAddingSecret(false)
+              }}
+              onSubmit={async (values) => {
+                let adding = values.id === -1
+                let _secret = await api.saveSecret(values)
+                if (adding) {
+                  setAddingSecret(false)
+                  setSecrets([_secret].concat(_secrets.filter(s => s.id > 0)))
+                }
+                else {
+                  setSecrets(_secrets.map(s => s.id === _secret.id ? _secret : s))
+                }
+                setEditingSecret(_secret)
+                setSelectedSecret(_secret)
                 setAddingSecret(false)
               }}
             />

@@ -9,6 +9,7 @@ import './shared/state'
 import './index.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { nav } from './shared/utils';
 
 let routes = {
   '/'         : Dashboard,
@@ -17,6 +18,7 @@ let routes = {
 }
 
 const App = () => {
+  if(window.location.hash === "") nav("/")
   return (
     <div className="App">
       <Header />

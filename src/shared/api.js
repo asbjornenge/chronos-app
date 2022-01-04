@@ -12,6 +12,55 @@ export async function saveTask(task) {
   else return await updateTask(task)
 }
 
+export async function saveSecret(secret) {
+  if (secret.id === -1) return await addSecret(secret)
+  else return await updateSecret(secret)
+}
+
+export async function addSecret(secret) {
+  delete secret.id
+  return await toast.promise(fetch(`${window.apihost}/secrets`,
+  {
+    method: 'POST',
+    body: JSON.stringify(secret)
+  }).then(res => res.json()),
+  {
+    pending: "Adding secret...",
+    success: "Added secret!",
+    error: "Failed to add secret!"
+  })
+}
+
+export async function updateSecret(secret) {
+  if (secret.secretvalue === "UNCHANGED") delete secret.secretvalue
+  console.log("Secret", secret)
+  return await toast.promise(fetch(`${window.apihost}/secrets/${secret.id}`, 
+    { 
+      method: 'PUT',
+      body: JSON.stringify(secret) 
+    })
+    .then(res => res.json()), 
+    {
+      pending: "Updating secret...",
+      success: "Updated secret!",
+      error: "Failed to update secret!"
+    })
+}
+
+export async function removeSecret(secret) {
+  return await toast.promise(fetch(`${window.apihost}/secrets/${secret.id}`, 
+    { 
+      method: 'DELETE'
+    })
+    .then(res => res.json()),
+    {
+      pending: "Deleting secret...",
+      success: "Deleted secret!",
+      error: "Failed to delete secret!"
+    })
+}
+
+
 export async function addTask(task) {
   delete task.id
   return await toast.promise(fetch(`${window.apihost}/tasks`, 

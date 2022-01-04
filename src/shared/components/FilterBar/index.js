@@ -2,7 +2,7 @@ import React from 'react'
 import { nav } from '../../utils'
 import './index.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faLock, faCogs, faCog } from '@fortawesome/free-solid-svg-icons'
+import { faLock, faHome, faFileCode } from '@fortawesome/free-solid-svg-icons'
 
 export default (props) => {
   return (
@@ -38,18 +38,24 @@ export default (props) => {
         </div>
       </div>
 
-      <div className="filterbuttons">
+      <div className="filterbuttons"> 
+      <div 
+          className={`filterbutton ${window.location.hash === "#/" || window.location.hash === "" ? 'selected': null}`} 
+          onClick={() => nav('/')}>
+          <FontAwesomeIcon icon={faHome}/>
+          <span>HOME</span>
+        </div>
         <div 
-          className={`filterbutton first`} 
+          className={`filterbutton ${window.location.hash === "#/secrets" ? 'selected': null}`} 
           onClick={() => nav('/secrets')}>
           <FontAwesomeIcon icon={faLock}/>
           <span>SECRETS</span>
         </div>
         <div 
-          className={`filterbutton last`} 
-          onClick={() => nav('/settings')}>
-          <FontAwesomeIcon icon={faCogs}/>
-          <span>SETTINGS</span>
+          className={`filterbutton last ${window.location.hash === "#/files" ? 'selected': null}`} 
+          onClick={() => nav('/files')}>
+          <FontAwesomeIcon icon={faFileCode}/>
+          <span>FILES</span>
         </div>
       </div>
     </div>

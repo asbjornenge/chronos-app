@@ -9,19 +9,6 @@ export default class SecretListItem extends Component {
     return (
       <div className={`SecretListItem ${this.props.selected ? 'selected' : ''}`} onClick={this.props.onClick}>
         {
-          this.props.secret.secrettype === "string" && 
-          <FontAwesomeIcon icon={faUserSecret} className='statusicon'/> 
-        }
-        {
-          this.props.secret.secrettype === "cert" &&
-          <FontAwesomeIcon icon={faCertificate} className='statusicon' />
-        }
-        {
-          this.props.secret.secrettype === "docker" && 
-          <FontAwesomeIcon icon={faFish} className='statusicon'/>
-        }
-        {
-          this.props.secret.secrettype != "cert" && this.props.secret.secrettype != "string" && this.props.secrettype != "docker" &&
           <FontAwesomeIcon icon={faLockOpen} className='statusicon' />
         }
         <span>{this.props.secret.name}</span>
