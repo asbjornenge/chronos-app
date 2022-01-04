@@ -1,0 +1,113 @@
+import React, { useState } from 'react'
+import { useSecrets } from '../../shared/hooks'
+import FilterBar from '../../shared/components/FilterBar'
+import Loading from '../../shared/components/Loading'
+import Error from '../../shared/components/Error'
+import SecretListItem from './components/SecretListItem'
+import SecretForm from './components/SecretForm'
+import ExecListItem from './components/ExecListItem'
+import ExecOutput from './components/ExecOutput'
+import './index.css'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faLock, faCogs, faCog } from '@fortawesome/free-solid-svg-icons'
+
+const addSecret = {
+  id: -1,
+}
+
+const SecretWrapper = (props) => {
+  return (
+    <div className="Task">
+      <FilterBar 
+        placeholder="Secret name" 
+        type="secret"
+        textFilter={props.textFilter}
+        setTextFilter={props.setTextFilter}
+        statusFilter={props.statusFilter}
+        setStatusFilter={props.setStatusFilter}
+        onAddClick={props.toggleAddSecret}
+       />
+      {props.children}
+    </div>
+  )
+}
+
+export default (props) => {
+  const [selectedSecret, setSelectedSecret] = useState({})
+  const [editingSecret, setEditingSecret] = useState(null)
+  const [addingSecret, setAddingSecret] = useState(false)
+  const [textFilter, setTextFilter] = useState('')
+  const [statusFilter, setStatusFilter] = useState('')
+  const [_secrets, setSecrets] = useSecrets()
+  //const _secret = () => api.getSecret()
+
+  let toggleAddSecret = () => {
+    let isAdding = !addingSecret
+    setAddingSecret(!addingSecret)
+    setEditingSecret(isAdding ? addSecret : null)
+    setSelectedSecret(isAdding ? addSecret : {})
+  }
+
+  if (addingSecret) _secrets.push(addSecret)
+  let secrets = _secrets.map(s => {
+    let selected = selectedSecret.id === s.id
+    return <SecretListItem
+      key={s.id}
+      secret={s}
+      selected={selected}
+      editSecret={(secret) => {setEditingSecret(secret)}}
+      onClick={() => {
+        setSelectedSecret(s)
+        setEditingSecret(s)
+        setAddingSecret(false)
+      }}
+      />
+  })
+  //let _secrets = [].concat(_secret())
+  //if (addingSecret) _secrets.push(addSecret)
+
+  return (
+    <SecretWrapper 
+      textFilter={textFilter}
+      setTextFilter={setTextFilter}
+      statusFilter={statusFilter}
+      setStatusFilter={(status) => {
+        let _status = status === statusFilter ? '' : status
+        setStatusFilter(_status)
+        }}
+      toggleAddSecret={toggleAddSecret}
+    >
+      <div className="SecretBody">
+        <div className="top">
+          <FontAwesomeIcon icon={faLock}/>
+          <h1>SECRETS</h1>
+          <div className="spacer"></div>
+        </div>
+        <div className="SecretInfoWrapper">
+          <div className="SecretList">
+            {secrets}  
+          </div>
+          <div className='SecretEdit'>
+          { editingSecret && 
+            <SecretForm
+              numSecrets={_secrets.length}
+              secret={editingSecret}
+              onCancel={() => {
+                setEditingSecret(null)
+                setAddingSecret(false)
+              }}
+            />
+          }
+          </div>
+        </div>
+      </div>
+    </SecretWrapper>
+  )
+}
+//  async togglePause() {
+//    let res = await fetch(`${window.apihost}/tasks/${task.id}`, { method: 'PUT', body: JSON.stringify({ paused: !task.paused}) })
+//    if (!res.ok) return
+//    props.dispatch(rest.actions.task.reset())
+//    props.dispatch(rest.actions.task.sync({id:task.id, steps:true, execs:10}))
+//  }
+//}

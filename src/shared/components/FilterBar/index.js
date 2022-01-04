@@ -1,5 +1,8 @@
 import React from 'react'
+import { nav } from '../../utils'
 import './index.css'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faLock, faCogs, faCog } from '@fortawesome/free-solid-svg-icons'
 
 export default (props) => {
   return (
@@ -32,6 +35,21 @@ export default (props) => {
           onClick={props.onAddClick}
           className={`filterbutton last add ${props.type || ''}`}> 
           <img src="graphics/add-white.svg" alt="add" />
+        </div>
+      </div>
+
+      <div className="filterbuttons">
+        <div 
+          className={`filterbutton first`} 
+          onClick={() => nav('/secrets')}>
+          <FontAwesomeIcon icon={faLock}/>
+          <span>SECRETS</span>
+        </div>
+        <div 
+          className={`filterbutton last`} 
+          onClick={() => nav('/settings')}>
+          <FontAwesomeIcon icon={faCogs}/>
+          <span>SETTINGS</span>
         </div>
       </div>
     </div>

@@ -10,6 +10,7 @@ import StepForm from './components/StepForm'
 import ExecListItem from './components/ExecListItem'
 import ExecOutput from './components/ExecOutput'
 import './index.css'
+import { toast } from 'react-toastify';
 
 const addStep = {
   id: 0,
@@ -129,20 +130,28 @@ export default (props) => {
   }
   let OnRunStep = async(step) => {
     setRunningStep(step.id)
-    let res = await api.runStep(step)
+    await toast.promise(api.runStep(step), 
+    {
+      pending: "Running step: " + step.name,
+      success: "Completed step:" + step.name,
+      error: "Failed step: " + step.name
+    })
     setRunningStep('')
     let newtask = await api.getTask(step.task, '?steps=true&execs=10')
     setTasks(tasks.map(t => t.id === step.task ? newtask : t)) 
-    if (!res.ok) return console.error(res.message)
   }
 
   let OnRun = async() => {
     setRunningTask(true)
-    let res = await api.runTask(task)
+    await toast.promise(api.runTask(task), 
+    {
+      pending: "Running task: " + task.name,
+      success: "Completed task:" + task.name,
+      error: "Failed task: " + task.name
+    })
     setRunningTask(false)
     let newtask = await api.getTask(task.id, '?steps=true&execs=10')
     setTasks(tasks.map(t => t.id === task.id ? newtask : t)) 
-    if (!res.ok) return console.error(res.message)
   }
 
   return (
