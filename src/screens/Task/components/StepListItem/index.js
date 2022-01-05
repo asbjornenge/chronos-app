@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react'
+import React, { Component } from 'react'
 import { getStepStatus } from '../../../../shared/utils'
 import './index.css'
 export default class StepListItem extends Component {

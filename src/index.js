@@ -5,16 +5,18 @@ import Header from './shared/components/Header'
 import Dashboard from './screens/Dashboard'
 import Task from './screens/Task'
 import Secret from './screens/Secret'
+import Files from './screens/Files'
 import './shared/state'
 import './index.css';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { nav } from './shared/utils';
 
 let routes = {
   '/'         : Dashboard,
   '/task/:id' : Task,
-  '/secrets'  : Secret
+  '/secrets'  : Secret,
+  '/files'    : Files,
 }
 
 const App = () => {

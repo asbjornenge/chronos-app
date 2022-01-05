@@ -44,7 +44,28 @@ const useSecrets = () => {
   return [secrets, setSecrets]
 }
 
+const useFiles = () => {
+  let [files, setFiles] = useStore('files')
+
+  async function fetchFiles() {
+    if (files.length > 0) return
+    let _files = files.slice()
+    _files.loading = true
+    setFiles(_files)
+    _files = await api.getFiles().catch(e => {files.error = e.message; return files})
+    _files.loading = false
+    setFiles(_files)
+  }
+
+  useEffect(() => {
+    fetchFiles()
+  }, [])
+
+  return [files, setFiles]
+}
+
 export {
   useTasks,
-  useSecrets
+  useSecrets,
+  useFiles
 }

@@ -14,19 +14,19 @@ export default (props) => {
         placeholder={props.placeholder || ''} />
       <div className="filterbuttons">
         <div 
-          className={`filterbutton first ${props.statusFilter === 'failing' ? 'selected' : ''}`} 
+          className={`filterbutton first ${props.statusFilter === 'failing' ? 'selected' : ''}${typeof props.disabledStatus !== 'undefined' && props.disabledStatus.find(d => d === 'failing') !== undefined ? 'disabled' : ""}`} 
           onClick={() => props.setStatusFilter('failing')}>
           <img src="graphics/failing.svg" alt="failing" />
           <span>FAILING</span>
         </div>
         <div 
-          className={`filterbutton ${props.statusFilter === 'passing' ? 'selected' : ''}`} 
+          className={`filterbutton ${props.statusFilter === 'passing' ? 'selected' : ''}${typeof props.disabledStatus !== 'undefined' && props.disabledStatus.find(d => d === 'passing') !== undefined ? 'disabled' : ""}`} 
           onClick={() => props.setStatusFilter('passing')}>
           <img src="graphics/passing.svg" alt="passing" />
           <span>PASSING</span>
         </div>
         <div 
-          className={`filterbutton ${props.statusFilter === 'paused' ? 'selected' : ''}`} 
+          className={`filterbutton ${props.statusFilter === 'paused' ? 'selected' : ''}${typeof props.disabledStatus !== 'undefined' && props.disabledStatus.find(d => d === 'paused') !== undefined ? 'disabled' : ""}`} 
           onClick={() => props.setStatusFilter('paused')}>
           <img src="graphics/paused.svg" alt="paused" />
           <span>PAUSED</span>

@@ -1,4 +1,4 @@
-.SecretForm {
+.FileForm {
   display: flex;
   flex-direction: column;
   padding-top: 10px;
@@ -6,24 +6,24 @@
   width: 100%;
 }
 
-.SecretForm h2 {
+.FileForm h2 {
   padding: 10px;
   padding-top: 0px;
   margin: 0px;
   text-align: left;
 }
 
-.SecretBody .SecretInfoWrapper div.SecretEdit .buttons {
+.FileBody .FileInfoWrapper div.FileEdit .buttons {
   padding: 10px;
   margin: 0px;
 }
 
-.SecretForm > div {
+.FileForm > div {
   display: flex;
   flex: auto;
 }
 
-.SecretForm label {
+.FileForm label {
   width: 100px;
   text-align: start;
   align-items: center;
@@ -31,7 +31,7 @@
   display: flex;
 }
 
-.SecretForm input {
+.FileForm input {
   font-size: 14px;
   border: 1px solid var(--border-color); 
   margin-right: 10px;
@@ -41,7 +41,7 @@
   outline: none!important;
 }
 
-.SecretForm select {
+.FileForm select {
   font-size: 14px;
   border: 1px solid var(--border-color); 
   margin-right: 10px;
@@ -51,21 +51,21 @@
   outline: none!important;
 }
 
-.SecretForm input:valid {
+.FileForm input:valid {
   border-left: 1px solid var(--border-color); 
 }
 
-.SecretForm input:invalid{
+.FileForm input:invalid{
   border-left: 1px solid red!important; 
   outline: none;
   box-shadow: none;
 }
 
-.SecretForm input.first select.first {
+.FileForm input.first select.first {
   border-bottom: 0;
 }
 
-.SecretForm input.last select.last {
+.FileForm input.last select.last {
   border-top: 0;
 }
 
@@ -108,4 +108,45 @@
 
 #clickable {
   cursor:pointer;
+}
+
+.TheDropZone {
+  margin: 2%;
+  /* min-height: 400px;
+  background-image: linear-gradient(45deg, #adadad 25%, #ffffff 25%, #ffffff 50%, #adadad 50%, #adadad 75%, #ffffff 75%, #ffffff 100%);
+  background-size: 56.57px 56.57px; */
+  flex: 1;
+  display: 'flex';
+  padding: '20px';
+  border: 2px dashed #eeeeee;
+  background-color: '#fafafa';
+  color: '#bdbdbd';
+  outline: 'none';
+  transition: 'border .24s ease-in-out';
+  height:100px;
+}
+
+.TheDropZone:hover {
+  /* box-shadow: 0px 0px 1px 1px dimgray; */
+  border: 2px dashed '#2196f3';
+  cursor:pointer;
+}
+
+.container {
+  display:grid !important;
+}
+
+.submitbtn {
+  width: 96%;
+  height: 40px;
+  margin: 0px auto;
+  background-color: green;
+  font-size:20px;
+  color:white;
+  border: 0px;
+  border-radius: 3px;
+}
+
+.submitbtn:hover {
+  transform: scale(1.02);
 }

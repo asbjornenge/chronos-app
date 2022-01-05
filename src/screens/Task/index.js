@@ -4,7 +4,7 @@ import * as api from '../../shared/api'
 import FilterBar from '../../shared/components/FilterBar'
 import Loading from '../../shared/components/Loading'
 import Error from '../../shared/components/Error'
-import { getTaskStatus } from '../../shared/utils'
+import { getTaskStatus, getStepStatus } from '../../shared/utils'
 import StepListItem from './components/StepListItem'
 import StepForm from './components/StepForm'
 import ExecListItem from './components/ExecListItem'
@@ -28,6 +28,7 @@ const TaskWrapper = (props) => {
         statusFilter={props.statusFilter}
         setStatusFilter={props.setStatusFilter}
         onAddClick={props.toggleAddStep}
+        disabledStatus={['paused']}
        />
       {props.children}
     </div>
@@ -93,7 +94,18 @@ export default (props) => {
   if (addingStep) _steps.push(addStep)
   _steps.sort((a,b) => (a.sort_order > b.sort_order) ? 1 : -1)
 
-  let steps = _steps.sort((a,b) => (a.sort_order > b.sort_order) ? 1 : -1).map(s => {
+  let steps = _steps.sort((a,b) => (a.sort_order > b.sort_order) ? 1 : -1)
+    .filter(s => {
+      if (statusFilter === '') return true
+      if (statusFilter === getStepStatus(s)) return true
+      return false
+    })
+    .filter(s => {
+      if (textFilter === '') return true
+      if (s.name.toLowerCase().indexOf(textFilter.toLowerCase()) >= 0) return true
+      return false
+    })
+    .map(s => {
     let running = runningStep === s.id ? true : false
     let selected = selectedStep.id === s.id
     if (selected) execs = s.execs.map(e => {

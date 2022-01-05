@@ -1,13 +1,11 @@
 import React, { useState } from 'react'
 import { useSecrets } from '../../shared/hooks'
 import FilterBar from '../../shared/components/FilterBar'
-import Loading from '../../shared/components/Loading'
-import Error from '../../shared/components/Error'
 import SecretListItem from './components/SecretListItem'
 import SecretForm from './components/SecretForm'
 import './index.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faLock, faCogs, faCog } from '@fortawesome/free-solid-svg-icons'
+import { faLock } from '@fortawesome/free-solid-svg-icons'
 import * as api from '../../shared/api'
 
 const addSecret = {
@@ -25,6 +23,7 @@ const SecretWrapper = (props) => {
         statusFilter={props.statusFilter}
         setStatusFilter={props.setStatusFilter}
         onAddClick={props.toggleAddSecret}
+        disabledStatus={['paused', 'passing', 'failing']}
        />
       {props.children}
     </div>
@@ -50,7 +49,13 @@ export default (props) => {
   }
 
   if (addingSecret) _secrets.push(addSecret)
-  let secrets = _secrets.map(s => {
+  let secrets = _secrets
+    .filter(s => {
+      if (textFilter === '') return true
+      if (s.name.toLowerCase().indexOf(textFilter.toLowerCase()) >= 0) return true
+      return false
+    })
+    .map(s => {
     let selected = selectedSecret.id === s.id
     return <SecretListItem
       key={s.id}

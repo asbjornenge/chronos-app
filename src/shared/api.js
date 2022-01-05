@@ -23,12 +23,19 @@ export async function addSecret(secret) {
   {
     method: 'POST',
     body: JSON.stringify(secret)
-  }).then(res => res.json()),
+  }).then(res => {
+    if (res.ok) {
+      return res.json()
+    }
+    else {
+      throw new Error(`Unable to add ${secret.name}`)
+    }
+  }).catch(err => this.reject(err.message)), 
   {
     pending: "Adding secret...",
     success: "Added secret!",
     error: "Failed to add secret!"
-  })
+  }).catch(err => err)
 }
 
 export async function updateSecret(secret) {
@@ -39,12 +46,19 @@ export async function updateSecret(secret) {
       method: 'PUT',
       body: JSON.stringify(secret) 
     })
-    .then(res => res.json()), 
+    .then(res => {
+      if (res.ok) {
+        return res.json()
+      }
+      else {
+        throw new Error(`Unable to update ${secret.name}`)
+      }
+    }).catch(err => this.reject(err.message)), 
     {
       pending: "Updating secret...",
       success: "Updated secret!",
       error: "Failed to update secret!"
-    })
+    }).catch(err => err)
 }
 
 export async function removeSecret(secret) {
@@ -52,12 +66,19 @@ export async function removeSecret(secret) {
     { 
       method: 'DELETE'
     })
-    .then(res => res.json()),
+    .then(res => {
+      if (res.ok) {
+        return res.json()
+      }
+      else {
+        throw new Error(`Unable to delete ${secret.name}`)
+      }
+    }).catch(err => this.reject(err.message)), 
     {
       pending: "Deleting secret...",
       success: "Deleted secret!",
       error: "Failed to delete secret!"
-    })
+    }).catch(err => err)
 }
 
 
@@ -67,12 +88,19 @@ export async function addTask(task) {
   {
     method: 'POST',
     body: JSON.stringify(task)
-  }).then(res => res.json()), 
+  }).then(res => {
+    if (res.ok) {
+      return res.json()
+    }
+    else {
+      throw new Error(`Unable to add ${task.name}`)
+    }
+  }).catch(err => this.reject(err.message)), 
   {
     pending: "Adding task...",
     success: "Added task!",
     error: "Failed to add task!"
-  })
+  }).catch(err => err)
 }
 
 export async function runTask(task) {
@@ -117,18 +145,96 @@ export async function getSecret() {
     .then(res => res.json())
 }
 
+export async function getFiles() {
+  return await fetch(`${window.apihost}/files`) 
+    .then(res => res.json())
+}
+
+export async function uploadFile(files) {
+  const filePromises = files.map((file) => {
+    // Return a promise per file
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = async () => {
+        try {
+          // Resolve the promise with the response value
+          let response = await toast.promise(
+            fetch(`${window.apihost}/files/${encodeURI(file.name)}`, 
+            {
+              method: 'POST',
+              body: reader.result
+            })
+              .then(res => {
+                if (res.ok) {
+                  return res.json()
+                }
+                else {
+                  throw new Error("Failed to fetch")
+                }
+              })
+              .catch(error => this.reject(error)),
+            {
+              pending: `Uploading ${file.name}...`,
+              success: `Uploaded ${file.name}!`,
+              error: `Failed to upload ${file.name}`              
+            }
+          ).catch(error => reject(error))
+          resolve(response);
+        } catch (err) {
+          reject(err);
+        }
+      };
+      reader.onerror = (error) => {
+        reject(error);
+      };
+      reader.readAsArrayBuffer(file);
+    });
+  });
+  // Wait for all promises to be resolved
+  const returnfiles = await Promise.all(filePromises).catch(err => console.error(err));
+  return returnfiles
+}
+
+export async function deleteFile(file) {
+  let escaped = encodeURI(file)
+  return await toast.promise(fetch(`${window.apihost}/files/${escaped}`, 
+    { 
+      method: 'DELETE',
+    })
+    .then(res => {
+      if (res.ok) {
+        return res.json()
+      }
+      else {
+        throw new Error(`Unable to delete ${file}`)
+      }
+    }).catch(err => this.reject(err.message)), 
+    {
+      pending: "Deleting file...",
+      success: "Deleted file!",
+      error: "Failed to delete file!"
+    }).catch(err => err)
+}
+
 export async function updateTask(task) {
   return await toast.promise(fetch(`${window.apihost}/tasks/${task.id}`, 
     { 
       method: 'PUT',
       body: JSON.stringify(task) 
     })
-    .then(res => res.json()), 
+    .then(res => {
+      if (res.ok) {
+        return res.json()
+      }
+      else {
+        throw new Error(`Unable to update ${task.name}`)
+      }
+    }).catch(err => this.reject(err.message)), 
     {
       pending: "Updating task...",
       success: "Updated task!",
       error: "Failed to update task!"
-    })
+    }).catch(err => err)
 }
 
 export async function removeTask(task) {
@@ -136,12 +242,19 @@ export async function removeTask(task) {
     { 
       method: 'DELETE'
     })
-    .then(res => res.json()),
+    .then(res => {
+      if (res.ok) {
+        return res.json()
+      }
+      else {
+        throw new Error(`Unable to delete ${task.name}`)
+      }
+    }).catch(err => this.reject(err.message)), 
     {
       pending: "Deleting task...",
       success: "Deleted task!",
       error: "Failed to delete task!"
-    })
+    }).catch(err => err)
 }
 
 export async function toggleTaskPause(task) {
@@ -149,12 +262,19 @@ export async function toggleTaskPause(task) {
     { 
       method: 'PUT', 
       body: JSON.stringify({ paused: !task.paused}) 
-    }),
+    }).then(res => {
+      if (res.ok) {
+        return res
+      }
+      else {
+        throw new Error(`Unable to toggle ${task.name}`)
+      }
+    }).catch(err => this.reject(err.message)), 
     {
       pending: task.paused ? "Enabling task...": "Pausing task...",
       success: task.paused ? "Task enabled!" : "Task paused!",
       error: task.paused ? "Failed to enable task!": "Failed to pause task!"
-    })
+    }).catch(err => err)
 }
 
 export async function saveStep(step, task) {
@@ -169,12 +289,19 @@ export async function addStep(step, task) {
       method: 'POST', 
       body: JSON.stringify(step) 
     })
-    .then(res => res.json()),
+    .then(res => {
+      if (res.ok) {
+        return res.json()
+      }
+      else {
+        throw new Error(`Unable to add ${step.name}`)
+      }
+    }).catch(err => this.reject(err.message)), 
     {
       pending: "Adding step...",
       success: "Step added!",
       error: "Failed to add step!"
-    })   
+    }).catch(err => err)
 }
 
 export async function updateStep(step, task) {
@@ -182,13 +309,19 @@ export async function updateStep(step, task) {
     { 
       method: 'PUT',
       body: JSON.stringify(step)
-    })
-    .then(res => res.json()),
+    }).then(res => {
+      if (res.ok) {
+        return res.json()
+      }
+      else {
+        throw new Error(`Unable to update ${step.name}`)
+      }
+    }).catch(err => this.reject(err.message)), 
     {
       pending: "Updating step...",
       success: "Step updated!",
       error: "Failed to update step!"
-    })
+    }).catch(err => err)
 }
 
 export async function removeStep(step, task) {
@@ -196,10 +329,17 @@ export async function removeStep(step, task) {
     { 
       method: 'DELETE'
     })
-    .then(res => res.json()),
+    .then(res => {
+      if (res.ok) {
+        return res.json()
+      }
+      else {
+        throw new Error(`Unable to delete ${step.name}`)
+      }
+    }).catch(err => this.reject(err.message)), 
     {
       pending: "Deleting step...",
       success: "Step deleted!",
       error: "Failed to delete step!"
-    })
+    }).catch(err => err)
 }

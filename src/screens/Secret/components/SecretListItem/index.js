@@ -1,6 +1,6 @@
-import React, { Component, useState } from 'react'
+import React, { Component } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUserSecret, faCertificate, faLockOpen, faFish } from '@fortawesome/free-solid-svg-icons'
+import { faLockOpen } from '@fortawesome/free-solid-svg-icons'
 
 import './index.css'
 export default class SecretListItem extends Component {
