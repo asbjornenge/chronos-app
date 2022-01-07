@@ -10,11 +10,18 @@ const useTasks = () => {
     let _tasks = tasks.slice()
     _tasks.loading = true
     setTasks(_tasks)
-    _tasks = await fetch(`${window.apihost}/dashboard`)
-      .then(res => res.json())
-      .catch(e => { tasks.error = e.message; return tasks })
-    _tasks.loading = false
-    setTasks(_tasks)
+    _tasks = await fetch(`${window.apihost}/dashboard`, {credentials: 'include'})
+      .then(res => res.status === 401 ? window.location = `${window.apihost}/login` : res.json()).catch(e => { tasks.error = e.message; return tasks })
+    
+    try {
+      _tasks.loading = false
+      setTasks(_tasks)
+    }
+    catch (err) {
+      tasks.error = "Something went wrong"
+      return tasks      
+    }
+
   }
 
   useEffect(() => {
@@ -64,8 +71,23 @@ const useFiles = () => {
   return [files, setFiles]
 }
 
+const useProfile = () => {
+  let [profile, setProfile] = useStore('profile')
+  async function fetchProfile() {
+    if (profile.length > 0) return
+    let _profile = await api.getProfile().catch(e => console.error(e) )
+    setProfile(_profile)
+  }
+
+  useEffect(() => {
+    fetchProfile()
+  }, [])
+  return [profile, setProfile]
+}
+
 export {
   useTasks,
   useSecrets,
-  useFiles
+  useFiles,
+  useProfile
 }

@@ -101,7 +101,6 @@ export default (props) => {
               onCancel={(secret) => {
                 setEditingSecret(null)
                 setAddingSecret(false)
-                console.log(secret)
 
                 if (secret.id === -1) {
                   setSecrets(_secrets.filter(s => s.id !== secret.id ))

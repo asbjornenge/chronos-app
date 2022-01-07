@@ -3,7 +3,12 @@ import { toast } from 'react-toastify';
 window.apihost = window.location.hostname === 'localhost' ? `http://${window.location.hostname}:3001` : './api'
 
 export async function getTask(id, params='') {
-  return await fetch(`${window.apihost}/tasks/${id}${params}`) 
+  return await fetch(`${window.apihost}/tasks/${id}${params}`, {credentials: 'include'}) 
+    .then(res => res.json())
+}
+
+export async function getProfile() {
+  return await fetch(`${window.apihost}/profile`, {credentials: 'include'}) 
     .then(res => res.json())
 }
 
@@ -22,7 +27,8 @@ export async function addSecret(secret) {
   return await toast.promise(fetch(`${window.apihost}/secrets`,
   {
     method: 'POST',
-    body: JSON.stringify(secret)
+    body: JSON.stringify(secret),
+    credentials: 'include'
   }).then(res => {
     if (res.ok) {
       return res.json()
@@ -40,11 +46,11 @@ export async function addSecret(secret) {
 
 export async function updateSecret(secret) {
   if (secret.secretvalue === "UNCHANGED") delete secret.secretvalue
-  console.log("Secret", secret)
   return await toast.promise(fetch(`${window.apihost}/secrets/${secret.id}`, 
     { 
       method: 'PUT',
-      body: JSON.stringify(secret) 
+      body: JSON.stringify(secret),
+      credentials: 'include'
     })
     .then(res => {
       if (res.ok) {
@@ -64,7 +70,8 @@ export async function updateSecret(secret) {
 export async function removeSecret(secret) {
   return await toast.promise(fetch(`${window.apihost}/secrets/${secret.id}`, 
     { 
-      method: 'DELETE'
+      method: 'DELETE',
+      credentials: 'include'
     })
     .then(res => {
       if (res.ok) {
@@ -87,7 +94,8 @@ export async function addTask(task) {
   return await toast.promise(fetch(`${window.apihost}/tasks`, 
   {
     method: 'POST',
-    body: JSON.stringify(task)
+    body: JSON.stringify(task),
+    credentials: 'include'
   }).then(res => {
     if (res.ok) {
       return res.json()
@@ -109,6 +117,7 @@ export async function runTask(task) {
     return await fetch(`${window.apihost}/run/${task.id}`, 
     { 
       method: 'GET', 
+      credentials: 'include'
     })
   }
   catch (err) {
@@ -129,6 +138,7 @@ export async function runStep(step) {
     var result =  await fetch(`${window.apihost}/run/${step.task}/steps/${step.id}`, 
   { 
     method: 'GET', 
+    credentials: 'include'
   })
   }
   catch (err) {
@@ -141,12 +151,12 @@ export async function runStep(step) {
 }
 
 export async function getSecret() {
-  return await fetch(`${window.apihost}/secrets`) 
+  return await fetch(`${window.apihost}/secrets`, {credentials: 'include'}) 
     .then(res => res.json())
 }
 
 export async function getFiles() {
-  return await fetch(`${window.apihost}/files`) 
+  return await fetch(`${window.apihost}/files`,{credentials: 'include'}) 
     .then(res => res.json())
 }
 
@@ -162,7 +172,8 @@ export async function uploadFile(files) {
             fetch(`${window.apihost}/files/${encodeURI(file.name)}`, 
             {
               method: 'POST',
-              body: reader.result
+              body: reader.result,
+              credentials: 'include'
             })
               .then(res => {
                 if (res.ok) {
@@ -200,6 +211,7 @@ export async function deleteFile(file) {
   return await toast.promise(fetch(`${window.apihost}/files/${escaped}`, 
     { 
       method: 'DELETE',
+      credentials:'include',
     })
     .then(res => {
       if (res.ok) {
@@ -220,7 +232,8 @@ export async function updateTask(task) {
   return await toast.promise(fetch(`${window.apihost}/tasks/${task.id}`, 
     { 
       method: 'PUT',
-      body: JSON.stringify(task) 
+      body: JSON.stringify(task),
+      credentials: 'include'
     })
     .then(res => {
       if (res.ok) {
@@ -240,7 +253,8 @@ export async function updateTask(task) {
 export async function removeTask(task) {
   return await toast.promise(fetch(`${window.apihost}/tasks/${task.id}`, 
     { 
-      method: 'DELETE'
+      method: 'DELETE',
+      credentials:'include'
     })
     .then(res => {
       if (res.ok) {
@@ -261,7 +275,8 @@ export async function toggleTaskPause(task) {
   return await toast.promise(fetch(`${window.apihost}/tasks/${task.id}`, 
     { 
       method: 'PUT', 
-      body: JSON.stringify({ paused: !task.paused}) 
+      body: JSON.stringify({ paused: !task.paused}),
+      credentials: 'include'
     }).then(res => {
       if (res.ok) {
         return res
@@ -287,7 +302,8 @@ export async function addStep(step, task) {
   return await toast.promise(fetch(`${window.apihost}/tasks/${task.id}/steps`, 
     { 
       method: 'POST', 
-      body: JSON.stringify(step) 
+      body: JSON.stringify(step),
+      credentials: 'include'
     })
     .then(res => {
       if (res.ok) {
@@ -308,7 +324,8 @@ export async function updateStep(step, task) {
   return await toast.promise(fetch(`${window.apihost}/tasks/${task.id}/steps/${step.id}`, 
     { 
       method: 'PUT',
-      body: JSON.stringify(step)
+      body: JSON.stringify(step),
+      credentials:'include'
     }).then(res => {
       if (res.ok) {
         return res.json()
@@ -327,7 +344,8 @@ export async function updateStep(step, task) {
 export async function removeStep(step, task) {
   return await toast.promise(fetch(`${window.apihost}/tasks/${task.id}/steps/${step.id}`, 
     { 
-      method: 'DELETE'
+      method: 'DELETE',
+      credentials: 'include'
     })
     .then(res => {
       if (res.ok) {

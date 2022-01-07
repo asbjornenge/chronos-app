@@ -2,9 +2,36 @@ import React from 'react'
 import { nav } from '../../utils'
 import './index.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faLock, faHome, faFileCode } from '@fortawesome/free-solid-svg-icons'
+import { faLock, faHome, faFileCode, faUser } from '@fortawesome/free-solid-svg-icons'
+import { useProfile } from '../../hooks.js'
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 
 export default (props) => {
+  const { profile } = useProfile()
+
+  const doLogout = async() => {
+    confirmAlert({
+      title: 'Are you sure?',
+      message: 'Are you sure you want to sign out?',
+      buttons: [
+        {
+          label: 'Yes',
+          onClick: () => window.location = `${window.apihost}/logout`
+        },
+        {
+          label: 'No',
+        }
+      ]
+    });  
+  }
+
+  let authEnabled = () => {
+    let returnvalue = typeof profile !== "undefined"
+    console.log(returnvalue)
+    return returnvalue
+  }
+
   return (
     <div className="FilterBar">
       <input 
@@ -40,7 +67,7 @@ export default (props) => {
 
       <div className="filterbuttons"> 
       <div 
-          className={`filterbutton ${window.location.hash === "#/" || window.location.hash === "" ? 'selected': null}`} 
+          className={`filterbutton first ${window.location.hash === "#/" || window.location.hash === "" ? 'selected': null}`} 
           onClick={() => nav('/')}>
           <FontAwesomeIcon icon={faHome}/>
           <span>HOME</span>
@@ -52,11 +79,22 @@ export default (props) => {
           <span>SECRETS</span>
         </div>
         <div 
-          className={`filterbutton last ${window.location.hash === "#/files" ? 'selected': null}`} 
+          className={`filterbutton ${window.location.hash === "#/files" ? 'selected': null} ${authEnabled? "": "last"}`} 
           onClick={() => nav('/files')}>
           <FontAwesomeIcon icon={faFileCode}/>
           <span>FILES</span>
         </div>
+        {
+          authEnabled? 
+          <div 
+          className={`filterbutton last ProfileButton`}
+          onClick={doLogout.bind(this)}
+          >
+          <FontAwesomeIcon icon={faUser}/>
+          <span>SIGN OUT</span>
+        </div>: ""
+        }
+        
       </div>
     </div>
   )
