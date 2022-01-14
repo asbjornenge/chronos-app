@@ -4,12 +4,13 @@ import * as api from '../../shared/api'
 import FilterBar from '../../shared/components/FilterBar'
 import Loading from '../../shared/components/Loading'
 import Error from '../../shared/components/Error'
-import { getTaskStatus } from '../../shared/utils'
+import { getTaskStatus, getStepStatus } from '../../shared/utils'
 import StepListItem from './components/StepListItem'
 import StepForm from './components/StepForm'
 import ExecListItem from './components/ExecListItem'
 import ExecOutput from './components/ExecOutput'
 import './index.css'
+import { toast } from 'react-toastify';
 
 const addStep = {
   id: 0,
@@ -27,6 +28,7 @@ const TaskWrapper = (props) => {
         statusFilter={props.statusFilter}
         setStatusFilter={props.setStatusFilter}
         onAddClick={props.toggleAddStep}
+        disabledStatus={['paused']}
        />
       {props.children}
     </div>
@@ -41,6 +43,8 @@ export default (props) => {
   const [textFilter, setTextFilter] = useState('')
   const [statusFilter, setStatusFilter] = useState('')
   const [tasks, setTasks] = useTasks() 
+  const [runningStep, setRunningStep] = useState('')
+  const [runningTask, setRunningTask] = useState(false)
 
   let toggleAddStep = () => {
     let isAdding = !addingStep
@@ -89,7 +93,20 @@ export default (props) => {
   let _steps = [].concat(task.steps)
   if (addingStep) _steps.push(addStep)
   _steps.sort((a,b) => (a.sort_order > b.sort_order) ? 1 : -1)
-  let steps = _steps.map(s => {
+
+  let steps = _steps.sort((a,b) => (a.sort_order > b.sort_order) ? 1 : -1)
+    .filter(s => {
+      if (statusFilter === '') return true
+      if (statusFilter === getStepStatus(s)) return true
+      return false
+    })
+    .filter(s => {
+      if (textFilter === '') return true
+      if (s.name.toLowerCase().indexOf(textFilter.toLowerCase()) >= 0) return true
+      return false
+    })
+    .map(s => {
+    let running = runningStep === s.id ? true : false
     let selected = selectedStep.id === s.id
     if (selected) execs = s.execs.map(e => {
       let _selected = selectedExec.id === e.id
@@ -106,12 +123,14 @@ export default (props) => {
               step={s} 
               selected={selected}
               editStep={(step) => {setEditingStep(step)}}
+              runStep={(step) => {OnRunStep(step)}}
               onClick={() => {
                 setSelectedStep(s)
                 setSelectedExec({})
                 setEditingStep(null)
                 setAddingStep(false)
               }}
+              running = {running}
             />
   })
   let togglePauseIcon = task.paused ? 'play' : 'paused'
@@ -120,6 +139,31 @@ export default (props) => {
     if (!res.ok) return console.error(res.message) 
     task.paused = !task.paused 
     setTasks(tasks.map(t => t.id === task.id ? task : t))
+  }
+  let OnRunStep = async(step) => {
+    setRunningStep(step.id)
+    await toast.promise(api.runStep(step), 
+    {
+      pending: "Running step: " + step.name,
+      success: "Completed step:" + step.name,
+      error: "Failed step: " + step.name
+    })
+    setRunningStep('')
+    let newtask = await api.getTask(step.task, '?steps=true&execs=10')
+    setTasks(tasks.map(t => t.id === step.task ? newtask : t)) 
+  }
+
+  let OnRun = async() => {
+    setRunningTask(true)
+    await toast.promise(api.runTask(task), 
+    {
+      pending: "Running task: " + task.name,
+      success: "Completed task:" + task.name,
+      error: "Failed task: " + task.name
+    })
+    setRunningTask(false)
+    let newtask = await api.getTask(task.id, '?steps=true&execs=10')
+    setTasks(tasks.map(t => t.id === task.id ? newtask : t)) 
   }
 
   return (
@@ -138,8 +182,14 @@ export default (props) => {
           <img src={`graphics/${status}.svg`} alt={status} />
           <h1>{task.name}</h1>
           <div className="spacer"></div>
+          {
+            runningTask ? 
+            <img src={`graphics/wait.svg`} alt="wait" className='runicon' />:
+            <img src={`graphics/run.svg`} alt="run" onClick={OnRun} className='runicon img-clickable'/>
+          }
+          
           <div className="cron">{task.cron}</div>
-          <img src={`graphics/${togglePauseIcon}.svg`} alt="pause" onClick={togglePause} />
+          <img src={`graphics/${togglePauseIcon}.svg`} alt="pause" onClick={togglePause} className='img-clickable'/>
         </div>
         <div className="TaskInfoWrapper">
           <div className="StepList">
@@ -201,4 +251,3 @@ export default (props) => {
 //    props.dispatch(rest.actions.task.sync({id:task.id, steps:true, execs:10}))
 //  }
 //}
-

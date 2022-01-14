@@ -1,16 +1,16 @@
-.Task {
+.File {
   --font-size: 18px;
   --box-height: 50px;
 }
 
-.Task .TaskBody {
+.File .FileBody {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
 }
 
-.Task .TaskError {
+.File .FileError {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -18,49 +18,49 @@
   height: 50vh;
 }
 
-.TaskBody .top {
+.FileBody .top {
   display: flex;
   align-items: center;
   width: 100%;
 }
 
-.TaskBody .top img {
+.FileBody .top img {
   height: 35px;
 }
 
-.TaskBody .top h1 {
+.FileBody .top h1 {
   padding: 10px;
   margin-left: 10px;
 }
 
-.TaskBody .top .cron {
+.FileBody .top .cron {
   margin-right: 20px;
   font-size: var(--font-size);
 }
 
-.TaskBody .TaskInfoWrapper {
+.FileBody .FileInfoWrapper {
   display: flex;
   flex-direction: row;
   width: 100%;
 }
 
-.TaskBody .TaskInfoWrapper > div {
+.FileBody .FileInfoWrapper > div {
   border: 1px solid var(--border-color);
-  flex: 1;
+  flex: 4;
 }
 
-.TaskBody .TaskInfoWrapper > div:last-of-type {
+.FileBody .FileInfoWrapper > div:last-of-type {
   border-left: none; 
 }
 
-.TaskBody .TaskInfoWrapper > div:first-of-type {
+.FileBody .FileInfoWrapper > div:first-of-type {
   border-right: none; 
 }
 .runicon {
   margin-right: 15px;
 }
 
-.TaskBody .TaskInfoWrapper div.StepEdit {
+.FileBody .FileInfoWrapper div.FileEdit {
   border-left: 1px solid var(--border-color);
   flex: 2;
   display: flex;

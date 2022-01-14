@@ -1,0 +1,152 @@
+.FileForm {
+  display: flex;
+  flex-direction: column;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  width: 100%;
+}
+
+.FileForm h2 {
+  padding: 10px;
+  padding-top: 0px;
+  margin: 0px;
+  text-align: left;
+}
+
+.FileBody .FileInfoWrapper div.FileEdit .buttons {
+  padding: 10px;
+  margin: 0px;
+}
+
+.FileForm > div {
+  display: flex;
+  flex: auto;
+}
+
+.FileForm label {
+  width: 100px;
+  text-align: start;
+  align-items: center;
+  padding-left: 10px;
+  display: flex;
+}
+
+.FileForm input {
+  font-size: 14px;
+  border: 1px solid var(--border-color); 
+  margin-right: 10px;
+  flex: 1;
+  height: 30px;
+  text-indent: 5px;
+  outline: none!important;
+}
+
+.FileForm select {
+  font-size: 14px;
+  border: 1px solid var(--border-color); 
+  margin-right: 10px;
+  flex: 1;
+  height: 30px;
+  text-indent: 5px;
+  outline: none!important;
+}
+
+.FileForm input:valid {
+  border-left: 1px solid var(--border-color); 
+}
+
+.FileForm input:invalid{
+  border-left: 1px solid red!important; 
+  outline: none;
+  box-shadow: none;
+}
+
+.FileForm input.first select.first {
+  border-bottom: 0;
+}
+
+.FileForm input.last select.last {
+  border-top: 0;
+}
+
+.btn {
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  min-width:70px;
+}
+
+.btn:hover {
+  transform: scale(1.2);
+}
+
+.btn-green {
+  background-color: var(--color-green-light);
+  border-color: var(--color-green);
+  border: 2px solid var(--color-green);
+  border-radius: 5px;
+}
+
+.btn-red {
+  background-color: #ff6363;
+  border-color: #a63f3f;
+  border: 2px solid #a63f3f;
+  border-radius: 5px;
+}
+
+.btn-orange {
+  background-color: #ff8d4f;
+  border-color: #b86437;
+  border: 2px solid #b86437;
+  border-radius: 5px;
+}
+
+#clickable:hover {
+  transform:scale(1.1);
+}
+
+#clickable {
+  cursor:pointer;
+}
+
+.TheDropZone {
+  margin: 2%;
+  /* min-height: 400px;
+  background-image: linear-gradient(45deg, #adadad 25%, #ffffff 25%, #ffffff 50%, #adadad 50%, #adadad 75%, #ffffff 75%, #ffffff 100%);
+  background-size: 56.57px 56.57px; */
+  flex: 1;
+  display: 'flex';
+  padding: '20px';
+  border: 2px dashed #eeeeee;
+  background-color: '#fafafa';
+  color: '#bdbdbd';
+  outline: 'none';
+  transition: 'border .24s ease-in-out';
+  height:100px;
+}
+
+.TheDropZone:hover {
+  /* box-shadow: 0px 0px 1px 1px dimgray; */
+  border: 2px dashed '#2196f3';
+  cursor:pointer;
+}
+
+.container {
+  display:grid !important;
+}
+
+.submitbtn {
+  width: 96%;
+  height: 40px;
+  margin: 0px auto;
+  background-color: green;
+  font-size:20px;
+  color:white;
+  border: 0px;
+  border-radius: 3px;
+}
+
+.submitbtn:hover {
+  transform: scale(1.02);
+}

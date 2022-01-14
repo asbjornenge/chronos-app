@@ -55,11 +55,11 @@ export default class StepForm extends Component {
           </div>
         </form>
         <div className="buttons">
-          <button onClick={this.submit.bind(this)}>Save</button>
-          <button onClick={this.props.onCancel}>Cancel</button>
+          <button className='btn btn-green' onClick={this.submit.bind(this)}>Save</button>
+          <button className='btn btn-orange' onClick={this.props.onCancel}>Cancel</button>
           <div className="spacer"></div>
           { this.props.step.id !== 0 &&
-          <button onClick={this.delete.bind(this)}>Delete</button>
+          <button className='btn btn-red' onClick={this.delete.bind(this)}>Delete</button>
           }
         </div>
       </div>

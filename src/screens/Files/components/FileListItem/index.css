@@ -1,0 +1,69 @@
+.FileListItem {
+  display: flex;
+  height: 50px;
+  align-items: center;
+  border-bottom: 1px solid var(--background-color);
+  cursor: pointer;
+}
+
+.FileListItem:hover {
+  transform: scale(1.01);
+  background-color: #fefefe;
+  border: 1px solid var(--border-color)
+}
+
+.FileListItem:last-of-type {
+  border-bottom: none;
+}
+
+.FileListItem:first-of-type {
+  border-bottom: 1px solid var(--background-color);
+}
+
+.FileListItem.selected {
+  background-color: var(--background-color);
+}
+
+.FileListItem span {
+  display: block;
+  padding: 10px;
+}
+
+.FileListItem pre {
+  display: block;
+  padding: 10px;
+}
+
+.FileListItem img, svg {
+  height: 30px;
+  padding-left: 10px;
+}
+
+.FileListItem img.details {
+  padding-right: 10px;
+}
+
+.img-clickable:hover {
+  transform: scale(1.2);
+}
+
+.statusicon {
+  margin-right: 15px;
+}
+
+.iconContainer {
+  width: 30px;
+  height: 30px;
+}
+.filename {
+  margin-left: 20px;
+  border-left: 1px solid var(--background-color)
+}
+
+.filelisticon {
+  padding: 10px;
+}
+
+.filelisticon:hover {
+  transform: scale(1.5);
+}

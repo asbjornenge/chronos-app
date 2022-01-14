@@ -69,3 +69,9 @@
   background-color: var(--color-green-light);
   border-color: var(--color-green);
 }
+
+.disabled {
+  pointer-events: none;
+  cursor: not-allowed !important;
+  filter: grayscale(100%)
+}
