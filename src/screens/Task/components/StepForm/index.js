@@ -9,7 +9,8 @@ export default class StepForm extends Component {
     name: '',
     command: '',
     sort_order: DEFAULT_SORT_ORDER,
-    timeout: DEFAULT_TIMEOUT
+    timeout: DEFAULT_TIMEOUT,
+    stdoutregex: null
   }
   render() {
     return (
@@ -53,6 +54,14 @@ export default class StepForm extends Component {
               onChange={this.handleChange.bind(this, 'timeout')}
             />
           </div>
+          <div>
+          <label htmlFor="stdoutregex">Regex</label>
+            <input className="last" name="stdoutregex" id="stdoutregex" 
+              placeholder="Regex on stdout"
+              value={this.state.stdoutregex || null} 
+              onChange={this.handleChange.bind(this, 'stdoutregex')}
+            />
+          </div>
         </form>
         <div className="buttons">
           <button className='btn btn-green' onClick={this.submit.bind(this)}>Save</button>
@@ -81,10 +90,10 @@ export default class StepForm extends Component {
     this.setState(Object.assign(this.state, update))
   }
   setStateFromStep(step) {
-    let { id, name, command, sort_order, timeout } = step
+    let { id, name, command, sort_order, timeout, stdoutregex } = step
     if (!sort_order) sort_order = this.props.numSteps+1
     if (!timeout) timeout = DEFAULT_TIMEOUT 
-    this.setState(Object.assign({id, name, command, sort_order, timeout}))
+    this.setState(Object.assign({id, name, command, sort_order, timeout, stdoutregex}))
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.step.id !== this.props.step.id)
