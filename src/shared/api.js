@@ -12,6 +12,11 @@ export async function getProfile() {
     .then(res => res.json())
 }
 
+export async function getFailedExecs() {
+  return await fetch(`${window.apihost}/execs/failed`, {credentials: 'include'}) 
+    .then(res => res.json())
+}
+
 export async function saveTask(task) {
   if (task.id === 0) return await addTask(task)  
   else return await updateTask(task)

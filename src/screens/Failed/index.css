@@ -1,0 +1,79 @@
+.Failed {
+  --font-size: 18px;
+  --box-height: 50px;
+}
+
+.Failed .FailedBody {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.Failed .FailedError {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 50vh;
+}
+
+.FailedBody .top {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.FailedBody .top img {
+  height: 35px;
+}
+
+.FailedBody .top h1 {
+  padding: 10px;
+  margin-left: 10px;
+}
+
+.FailedBody .top .cron {
+  margin-right: 20px;
+  font-size: var(--font-size);
+}
+
+.FailedBody .FailedInfoWrapper {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.FailedBody .FailedInfoWrapper > div {
+  border: 1px solid var(--border-color);
+  flex: 4;
+}
+
+.FailedBody .FailedInfoWrapper > div:last-of-type {
+  border-left: none; 
+}
+
+.FailedBody .FailedInfoWrapper > div:first-of-type {
+  border-right: none; 
+}
+.runicon {
+  margin-right: 15px;
+}
+
+.FailedBody .FailedInfoWrapper div.FailedEdit {
+  border-left: 1px solid var(--border-color);
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.img-clickable {
+  transform: scale(1.1);
+}
+
+a {
+  text-decoration: none;
+  color: black
+}

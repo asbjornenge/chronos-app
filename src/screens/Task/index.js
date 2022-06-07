@@ -59,6 +59,8 @@ export default (props) => {
     return selected
   }, null)
 
+  
+
   if (tasks.loading) {
     return (
       <TaskWrapper toggleAddStep={toggleAddStep}>
@@ -107,7 +109,7 @@ export default (props) => {
     })
     .map(s => {
     let running = runningStep === s.id ? true : false
-    let selected = selectedStep.id === s.id
+    let selected = selectedStep.id === s.id || (s.id?.toString() === props.stepid?.toString() && selectedStep.id === undefined)
     if (selected) execs = s.execs.map(e => {
       let _selected = selectedExec.id === e.id
       if (_selected) execOutput = <ExecOutput key={e.id+'output'} exec={e} />
@@ -165,7 +167,8 @@ export default (props) => {
     let newtask = await api.getTask(task.id, '?steps=true&execs=10')
     setTasks(tasks.map(t => t.id === task.id ? newtask : t)) 
   }
-
+  
+  
   return (
     <TaskWrapper 
       textFilter={textFilter}

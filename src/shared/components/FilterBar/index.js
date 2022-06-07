@@ -2,7 +2,7 @@ import React from 'react'
 import { nav } from '../../utils'
 import './index.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faLock, faHome, faFileCode, faUser } from '@fortawesome/free-solid-svg-icons'
+import { faLock, faHome, faFileCode, faUser, faBug } from '@fortawesome/free-solid-svg-icons'
 import { useProfile } from '../../hooks.js'
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
@@ -28,7 +28,6 @@ export default (props) => {
 
   let authEnabled = () => {
     let returnvalue = typeof profile !== "undefined"
-    console.log(returnvalue)
     return returnvalue
   }
 
@@ -79,10 +78,16 @@ export default (props) => {
           <span>SECRETS</span>
         </div>
         <div 
-          className={`filterbutton ${window.location.hash === "#/files" ? 'selected': null} ${authEnabled? "": "last"}`} 
+          className={`filterbutton ${window.location.hash === "#/files" ? 'selected': null}`} 
           onClick={() => nav('/files')}>
           <FontAwesomeIcon icon={faFileCode}/>
           <span>FILES</span>
+        </div>
+        <div
+          className={`filterbutton ${window.location.hash === "#/failed" ? 'selected': null} ${authEnabled? "": "last"}`} 
+            onClick={() => nav('/failed')}>
+            <FontAwesomeIcon icon={faBug}/>
+            <span>FAILED</span>
         </div>
         {
           authEnabled? 
