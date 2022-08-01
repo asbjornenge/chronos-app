@@ -11,7 +11,7 @@
     "@fortawesome/react-fontawesome": "^0.1.16",
     "@mui/material": "^5.8.2",
     "cron-parser": "^4.4.0",
-    "moment": "^2.29.3",
+    "moment": "^2.29.4",
     "react": "^17.0.0",
     "react-confirm-alert": "^2.7.0",
     "react-dom": "^17.0.0",
