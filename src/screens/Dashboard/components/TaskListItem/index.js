@@ -33,8 +33,8 @@ const TaskListItem = (props) => {
   }
 
   props.task.last?.forEach(e => {
-    if (timestamp === null) timestamp = moment(e.time_end)
-    else if (moment(e.time_end) > timestamp) timestamp = moment(e.time_end)
+    if (timestamp === null) timestamp = moment(e)
+    else if (moment(e) > timestamp) timestamp = moment(e)
   })
   let name,cron = null
   
