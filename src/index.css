@@ -1,6 +1,6 @@
 :root {
-  --background-color: #eaeaea;
-  --border-color: #ccc;
+  /* --background-color: #eaeaea;
+  --border-color: #ccc; */
   --color-blue: #006DF0;
   --color-blue-light: #3591ff;
   --color-green: #6fcc2b;
@@ -30,4 +30,46 @@ code {
 
 .spacer {
   flex: auto;
+}
+
+
+.top {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.top img {
+  height: 35px;
+}
+
+.top h1 {
+  padding: 10px;
+  margin-left: 10px;
+}
+
+.tophalf {
+  width: 33%
+}
+.middle {
+  width: 33%
+}
+
+.top .cron {
+  margin-right: 20px;
+  font-size: var(--font-size);
+}
+
+.top svg {
+  font-size: 32px;
+}
+
+.TitleIcon {
+  margin-right: 10px;
+}
+
+.TopRightBar span {
+  display:flex;
 }

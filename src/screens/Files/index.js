@@ -2,11 +2,16 @@ import React, { useState } from 'react'
 import { useFiles } from '../../shared/hooks'
 import FilterBar from '../../shared/components/FilterBar'
 import './index.css'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFileCode } from '@fortawesome/free-solid-svg-icons'
 import * as api from '../../shared/api'
 import FileListItem from './components/FileListItem'
 import FileForm from './components/FileForm'
+import TopBar from '../../shared/components/TopBar'
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import Paper from '@mui/material/Paper';
 
 const Filewrapper = (props) => {
   return (
@@ -19,14 +24,15 @@ const Filewrapper = (props) => {
         statusFilter={props.statusFilter}
         setStatusFilter={props.setStatusFilter}
         onAddClick={props.toggleAddFile}
-        disabledStatus={['paused', 'passing', 'failing']}
+        disabledStatus={['paused', 'passing', 'failing', 'run']}
+        noAdd={true}
        />
       {props.children}
     </div>
   )
 }
 
-export default (props) => {
+const Files = (props) => {
   const [selectedFile] = useState({})
   const [textFilter, setTextFilter] = useState('')
   const [statusFilter, setStatusFilter] = useState('')
@@ -78,15 +84,23 @@ export default (props) => {
         }}
       toggleAddFile={toggleAddFile}
     >
+      <TopBar
+          faIcon = {faFileCode}
+          title = { "Files" }
+        > 
+      </TopBar>
       <div className="FileBody">
-        <div className="top">
-          <FontAwesomeIcon icon={faFileCode}/>
-          <h1>Files</h1>
-          <div className="spacer"></div>
-        </div>
         <div className="FileInfoWrapper">
           <div className="FileList">
-            {_files}  
+            <TableContainer component={Paper}>
+              <Table sx={{minWidth: 400}} aria-label="a dense table">
+                <TableHead>
+                </TableHead>
+                <TableBody>
+                  {_files}
+                </TableBody>
+              </Table>
+            </TableContainer>
           </div>
           <div className='FileEdit'>
             <FileForm
@@ -106,10 +120,5 @@ export default (props) => {
     </Filewrapper>
   )
 }
-//  async togglePause() {
-//    let res = await fetch(`${window.apihost}/tasks/${task.id}`, { method: 'PUT', body: JSON.stringify({ paused: !task.paused}) })
-//    if (!res.ok) return
-//    props.dispatch(rest.actions.task.reset())
-//    props.dispatch(rest.actions.task.sync({id:task.id, steps:true, execs:10}))
-//  }
-//}
+
+export default Files

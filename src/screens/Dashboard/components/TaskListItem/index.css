@@ -1,45 +1,10 @@
-.TaskListItem {
-  height: 60px;
-  display: flex;
-  align-items: center;
-  width: 100%;
-  border-bottom: 1px solid var(--background-color);
-  cursor: pointer;
-}
-
-.TaskListItem img {
-  height: 20px;
-}
-
-.TaskListItem input {
-  border: none;
-  border-bottom: 1px solid var(--background-color);
-  font-size: 16px;
-}
-
-.TaskListItem .name input {
-  width: 300px;
-  margin-right: 10px;
-}
-
-.TaskListItem .cron {
-  width: 100px;
+.CronInput {
   text-align: right;
-}
-
-.TaskListItem .cron input {
-  width: 100px;
-  text-align: right;
-}
-
-.TaskListItem:hover .editbuttons {
-  display: block;
 }
 
 .TaskListItem .editbuttons {
   width: 100px;
   text-align: right;
-  display: none;
 }
 
 .TaskListItem .editbuttons img {
@@ -55,13 +20,29 @@
   opacity: 0.5;
 }
 
-.TaskListItem .lastrun {
+/* .TaskListItem .lastrun {
   width: 120px;
   text-align: right;
-}
+} */
 
-.TaskListItem span {
+/* .TaskListItem span {
   display: block;
   padding: 10px;
+} */
+
+.editbuttons img {
+  height: 30px;
+  margin-left: 10px;
+  cursor: grab;
 }
 
+.MuiTableCell-root img {
+  height: 30px;
+  margin-right: 10px;
+  /* width: 50px; */
+}
+
+.MuiTableCell-root, input {
+  font-size: 20px !important;
+  line-height: 20px;
+}

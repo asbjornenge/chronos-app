@@ -8,6 +8,15 @@ import { setTaskStatus } from '../../shared/utils'
 import { useTasks } from '../../shared/hooks'
 import * as api from '../../shared/api'
 import './index.css'
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import { faHome } from '@fortawesome/free-solid-svg-icons'
+import TopBar from '../../shared/components/TopBar'
 
 const addTask = {
   id: 0,
@@ -16,20 +25,16 @@ const addTask = {
   steps: []
 }
 
-export default (props) => {
+const Dashboard = (props) => {
   const [textFilter, setTextFilter] = useStore('textFilter')
   const [statusFilter, setStatusFilter] = useStore('statusFilter')
-  const [tasks, setTasks] = useTasks()
+  const [tasks, setTasks, fetchTasks] = useTasks()
   const [adding, setAdding] = useState(false)
 
   let saveTask = async (updatedTask) => {
-    let task = await api.saveTask(updatedTask)
-    task = await api.getTask(task.id, '?steps=true&execs=10') 
+    await api.saveTask(updatedTask)
     setAdding(false)
-    if (!updatedTask.id)
-      setTasks([task].concat(tasks))
-    else
-      setTasks(tasks.map(t => t.id === task.id ? task : t))
+    fetchTasks()
   }
 
   let removeTask = async (task) => {
@@ -62,6 +67,24 @@ export default (props) => {
         />
       )
     })
+  __tasks = (
+      <TableContainer component={Paper}>
+        <Table sx={{minWidth: 650}} aria-label="a dense table">
+          <TableHead>
+            <TableRow>
+              <TableCell>Name</TableCell>
+              <TableCell align='right'>Cron</TableCell>
+              <TableCell align='right'>Next</TableCell>
+              <TableCell align='right'>Last</TableCell>
+              <TableCell align='right'></TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {__tasks}
+          </TableBody>
+        </Table>
+      </TableContainer>)
+
   if (tasks.loading) {
     __tasks = <Loading style={{flex:'auto', width: 200, height: 200}} />
   }
@@ -83,9 +106,16 @@ export default (props) => {
         }}
         onAddClick={() => setAdding(!adding)} 
       />
+      <TopBar 
+        title={"Dashboard"}
+        faIcon={faHome}
+      />
+      
       <div className={(tasks.error || tasks.loading) ? "TaskListItemsError" : "TaskListItems"}>
         {__tasks}
       </div> 
     </div>
   )
 }
+
+export default Dashboard

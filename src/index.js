@@ -12,6 +12,14 @@ import './index.css';
 import { ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { nav } from './shared/utils';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { CssBaseline } from '@mui/material';
+
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+  },
+});
 
 let routes = {
   '/'         : Dashboard,
@@ -22,13 +30,19 @@ let routes = {
   '/task/:id/step/:stepid': Task
 }
 
+
+
 const App = () => {
   if(window.location.hash === "") nav("/")
   return (
+    
     <div className="App">
-      <Header />
-      <Router routes={routes} />
-      <ToastContainer position='bottom-right' />
+      <ThemeProvider theme={darkTheme}>
+        <CssBaseline/>
+        <Header />
+        <Router routes={routes} />
+        <ToastContainer position='bottom-right' theme='colored' pauseOnFocusLoss={false} pauseOnHover={true}/>
+      </ThemeProvider>
     </div>
   )
 }

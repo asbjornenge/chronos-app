@@ -91,3 +91,20 @@
   border: 2px solid #b86437;
   border-radius: 5px;
 }
+
+.StepForm {
+  margin-left: 5px;
+}
+
+.StepForm .MuiTextField-root {
+  width: calc(100% - 10px);
+  margin-top: 10px;
+}
+
+.StepForm .MuiButton-sizeMedium {
+  width: 80px;
+}
+
+#CancelButton {
+  margin-left: 10px;
+}

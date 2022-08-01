@@ -49,6 +49,11 @@
   flex: 1;
 }
 
+.ExecList {
+  margin-left: 5px;
+  margin-right: 5px;
+} 
+
 .TaskBody .TaskInfoWrapper > div:last-of-type {
   border-left: none; 
 }

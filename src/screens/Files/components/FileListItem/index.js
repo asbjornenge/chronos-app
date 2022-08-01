@@ -7,6 +7,7 @@ import 'react-confirm-alert/src/react-confirm-alert.css';
 import { toast } from 'react-toastify';
 
 import './index.css'
+import { TableCell, TableRow } from '@mui/material';
 export default class FileListItem extends Component {
   
   addtoClip(e) {
@@ -42,16 +43,22 @@ export default class FileListItem extends Component {
     //let exec = getLastExec(this.props.Secret)
     let ext = this.props.file.name.split(".").at(-1)
     return (
-      <div className={`FileListItem ${this.props.selected ? 'selected' : ''}`}>
-        <div className='itemcontainer'>
-          <FileIcon extension={ext.length > 0 && ext.length < 4 ? ext : "N/A"} />
-        </div>
-        <span className='filename'>{this.props.file.fullname}</span>
-        <div className="spacer"></div>
-        <FontAwesomeIcon icon={faClipboard} onClick={this.addtoClip.bind(this)} className='filelisticon'/>
-        <div className='minispacer'></div>
-        <FontAwesomeIcon icon={faTrash} onClick={this.deleteFile.bind(this)} className='filelisticon'/>
-      </div>
+      <TableRow className={`FileListItem ${this.props.selected ? 'selected' : ''}`}>
+        <TableCell>
+          <div className='flexmebruv'>
+            <div className='FileIconContainer'>
+              <FileIcon extension={ext.length > 0 && ext.length < 4 ? ext : "N/A"}/>
+            </div>
+            <span className='FileName'>{this.props.file.fullname}</span>
+          </div>
+        </TableCell>
+        <TableCell align="right">
+          <FontAwesomeIcon icon={faClipboard} onClick={this.addtoClip.bind(this)} className="FileListIcon"/>
+          {/* <div className='minispacer'></div> */}
+          <FontAwesomeIcon icon={faTrash} onClick={this.deleteFile.bind(this)} className="FileListIcon"/>
+        </TableCell>
+      </TableRow>
+      
     )
   }
   

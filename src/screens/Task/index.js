@@ -1,5 +1,4 @@
-import React, { useState } from 'react'
-import { useTasks } from '../../shared/hooks'
+import React, { useEffect, useState } from 'react'
 import * as api from '../../shared/api'
 import FilterBar from '../../shared/components/FilterBar'
 import Loading from '../../shared/components/Loading'
@@ -11,6 +10,12 @@ import ExecListItem from './components/ExecListItem'
 import ExecOutput from './components/ExecOutput'
 import './index.css'
 import { toast } from 'react-toastify';
+import TopBar from '../../shared/components/TopBar'
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import Paper from '@mui/material/Paper';
 
 const addStep = {
   id: 0,
@@ -35,17 +40,71 @@ const TaskWrapper = (props) => {
   )
 }
 
-export default (props) => {
+
+const Task = (props) => {
   const [selectedStep, setSelectedStep] = useState({})
   const [selectedExec, setSelectedExec] = useState({})
   const [editingStep, setEditingStep] = useState(null)
   const [addingStep, setAddingStep] = useState(false)
   const [textFilter, setTextFilter] = useState('')
   const [statusFilter, setStatusFilter] = useState('')
-  const [tasks, setTasks] = useTasks() 
-  const [runningStep, setRunningStep] = useState('')
-  const [runningTask, setRunningTask] = useState(false)
+  const [ctasks, setcTasks] = useState([]) 
 
+  const setStepHash = (s) => {
+    window.location.hash = `#/task/${props.id}/step/${s}`
+  }
+
+  useEffect(() => {
+    (async () => {
+      setcTasks(await api.getTaskDashboard(props.id))
+    })()
+  }, [])
+
+  useEffect(function() {
+    const { csocket } = require('../../shared/socket')
+
+    let socket = csocket()
+    socket.emit("tJoin", `/task/${props.id}`)
+
+    socket.on("newExec", (d) => {
+      setSelectedStep({id : d.step})
+      setSelectedExec(d)
+      setcTasks((p) => {
+        for (let step of p.steps) {
+          if (step.id === d.step) {
+            step.execs.push(d)
+            step.execs.sort((a,b) => (a.time_start > b.time_start) ? -1 : 1)
+            step.execs = step.execs.slice(0,10)
+          }
+        }
+        return {...p}
+      })
+    })
+    socket.on('updateExec', (d) => {
+      setcTasks((p) => {
+        let temp = {...p}
+        for (let step of temp.steps) {
+          if (step.id === d.step) {
+            for (let [index, exec] of step.execs.entries()) {
+              if (exec.id === d.id ) {
+                step.execs[index] = d
+                break
+              }
+            }
+            
+          }
+        }
+        return {...temp}
+      })
+    })
+
+    return function cleanup() {
+      socket.off('newExec')
+      socket.off('updateExec')
+      socket.emit("tLeave", `/task/${props.id}`)
+    }
+  }, [])
+  
   let toggleAddStep = () => {
     let isAdding = !addingStep
     setAddingStep(!addingStep)
@@ -53,15 +112,9 @@ export default (props) => {
     setSelectedStep(isAdding ? addStep : {})
   }
 
-  let task = tasks.reduce((selected, t) => {
-    if (selected) return selected
-    if (t.id === parseInt(props.id)) selected = t
-    return selected
-  }, null)
+  let task = ctasks  
 
-  
-
-  if (tasks.loading) {
+  if (Object.keys(ctasks).length === 0) {
     return (
       <TaskWrapper toggleAddStep={toggleAddStep}>
         <div className="TaskError">
@@ -70,11 +123,11 @@ export default (props) => {
       </TaskWrapper>
     )
   }
-  if (tasks.error) {
+  if (ctasks.error) {
     return (
       <TaskWrapper toggleAddStep={toggleAddStep}>
         <div className="TaskError">
-          <Error message={tasks.error} />
+          <Error message={ctasks.error} />
         </div>
       </TaskWrapper>
     )
@@ -89,12 +142,12 @@ export default (props) => {
     )
   }
 
-  let status = getTaskStatus(task)
+  let status = getTaskStatus(ctasks)
   let execs = []
   let execOutput = null
-  let _steps = [].concat(task.steps)
+  let _steps = [].concat(ctasks.steps)
   if (addingStep) _steps.push(addStep)
-  _steps.sort((a,b) => (a.sort_order > b.sort_order) ? 1 : -1)
+  //_steps.sort((a,b) => (a.sort_order > b.sort_order) ? 1 : -1)
 
   let steps = _steps.sort((a,b) => (a.sort_order > b.sort_order) ? 1 : -1)
     .filter(s => {
@@ -108,7 +161,6 @@ export default (props) => {
       return false
     })
     .map(s => {
-    let running = runningStep === s.id ? true : false
     let selected = selectedStep.id === s.id || (s.id?.toString() === props.stepid?.toString() && selectedStep.id === undefined)
     if (selected) execs = s.execs.map(e => {
       let _selected = selectedExec.id === e.id
@@ -131,41 +183,32 @@ export default (props) => {
                 setSelectedExec({})
                 setEditingStep(null)
                 setAddingStep(false)
+                setStepHash(s.id)
               }}
-              running = {running}
             />
   })
-  let togglePauseIcon = task.paused ? 'play' : 'paused'
   let togglePause = async () => {
     let res = await api.toggleTaskPause(task)
     if (!res.ok) return console.error(res.message) 
     task.paused = !task.paused 
-    setTasks(tasks.map(t => t.id === task.id ? task : t))
+    setcTasks({...task})
   }
   let OnRunStep = async(step) => {
-    setRunningStep(step.id)
     await toast.promise(api.runStep(step), 
     {
       pending: "Running step: " + step.name,
-      success: "Completed step:" + step.name,
+      success: "Scheduled step:" + step.name,
       error: "Failed step: " + step.name
     })
-    setRunningStep('')
-    let newtask = await api.getTask(step.task, '?steps=true&execs=10')
-    setTasks(tasks.map(t => t.id === step.task ? newtask : t)) 
   }
 
-  let OnRun = async() => {
-    setRunningTask(true)
+  let OnRun = async() => {    
     await toast.promise(api.runTask(task), 
     {
       pending: "Running task: " + task.name,
-      success: "Completed task:" + task.name,
+      success: "Scheduled task:" + task.name,
       error: "Failed task: " + task.name
     })
-    setRunningTask(false)
-    let newtask = await api.getTask(task.id, '?steps=true&execs=10')
-    setTasks(tasks.map(t => t.id === task.id ? newtask : t)) 
   }
   
   
@@ -181,26 +224,47 @@ export default (props) => {
       toggleAddStep={toggleAddStep}
     >
       <div className="TaskBody">
-        <div className="top">
-          <img src={`graphics/${status}.svg`} alt={status} />
-          <h1>{task.name}</h1>
-          <div className="spacer"></div>
-          {
-            runningTask ? 
-            <img src={`graphics/wait.svg`} alt="wait" className='runicon' />:
-            <img src={`graphics/run.svg`} alt="run" onClick={OnRun} className='runicon img-clickable'/>
-          }
+        <TopBar
+          SvgIcon = {<img src={`graphics/${status}.svg`} alt={status} />}
+          title = { " " + task.name}
+        >
+            <span>
+              {status === 'run' ? 
+              <img src={`graphics/wait.svg`} alt="wait" className='runicon' />:
+              <img src={`graphics/run.svg`} alt="run" onClick={OnRun} className='runicon img-clickable'/>}
+              <div className="cron">{task.cron}</div>
+              {
+                ctasks.paused ? 
+                <img src={`graphics/${ 'play' }.svg`} alt="pause" onClick={togglePause} className='img-clickable'/>:
+                <img src={`graphics/${'paused'}.svg`} alt="pause" onClick={togglePause} className='img-clickable'/>
+              }
+            </span>
           
-          <div className="cron">{task.cron}</div>
-          <img src={`graphics/${togglePauseIcon}.svg`} alt="pause" onClick={togglePause} className='img-clickable'/>
-        </div>
+        </TopBar>
         <div className="TaskInfoWrapper">
           <div className="StepList">
-            {steps}
+          <TableContainer component={Paper}>
+            <Table sx={{minWidth: 600}} aria-label="a dense table">
+              <TableHead>
+              </TableHead>
+              <TableBody>
+                {steps}
+              </TableBody>
+            </Table>
+          </TableContainer>
           </div>
           { !editingStep &&
             <div className="ExecList">
-              {execs}
+              <TableContainer component={Paper}>
+                <Table sx={{minWidth: 600}} aria-label="a dense table">
+                  <TableHead>
+                  </TableHead>
+                  <TableBody>
+                    {execs}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+              
             </div>
           }
           { !editingStep &&
@@ -234,7 +298,7 @@ export default (props) => {
                     _step.execs = step.execs
                     task.steps = task.steps.map(s => s.id === _step.id ? _step : s)
                   }
-                  setTasks(tasks.map(t => t.id === task.id ? task : t))
+                  setcTasks(task)
                   setEditingStep(_step)
                   setSelectedStep(_step)
                   setAddingStep(false)
@@ -247,10 +311,5 @@ export default (props) => {
     </TaskWrapper>
   )
 }
-//  async togglePause() {
-//    let res = await fetch(`${window.apihost}/tasks/${task.id}`, { method: 'PUT', body: JSON.stringify({ paused: !task.paused}) })
-//    if (!res.ok) return
-//    props.dispatch(rest.actions.task.reset())
-//    props.dispatch(rest.actions.task.sync({id:task.id, steps:true, execs:10}))
-//  }
-//}
+
+export default Task

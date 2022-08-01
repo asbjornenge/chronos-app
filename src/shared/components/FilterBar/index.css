@@ -5,12 +5,12 @@
 
 .FilterBar {
   display: flex;
-  padding: 30px;
+  padding: 5px;
   padding-left: 0px;
-  border-bottom: 1px solid var(--border-color);
+  /* border-bottom: 1px solid var(--border-color); */
 }
 
-.FilterBar input {
+.FilterBar .MuiInput-Input {
   height: var(--box-height);
   width: 300px;
   font-size: var(--font-size);
@@ -19,12 +19,24 @@
   text-indent: 10px;
 }
 
-.FilterBar .filterbuttons {
+/* .FilterBar .filterbuttons {
   display: flex;
+  margin-left: 30px;
+} */
+
+/* .FilterBar .NavButtons {
+  display: flex;
+} */
+
+.Filterbar .NavButtons, .FilterBar .filterbuttons {
   margin-left: 30px;
 }
 
 .FilterBar .filterbutton {
+  width: 70px;
+}
+
+/* .FilterBar .filterbutton {
   border: 1px solid var(--border-color);
   height: var(--box-height);
   width: 140px;
@@ -35,10 +47,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
-}
+} */
+
 
 .FilterBar .filterbutton.selected {
-  background-color: var(--background-color); 
+  background-color: rgba(255, 255, 255, 0.3)
+}
+
+.FilterBar .NavButton.selected {
+  background-color: rgba(255, 255, 255, 0.3)
 }
 
 .FilterBar .filterbutton img {
@@ -74,4 +91,21 @@
   pointer-events: none;
   cursor: not-allowed !important;
   filter: grayscale(100%)
+}
+
+.NavButtons svg {
+  font-size: 32px;
+  margin-right: 5px;
+}
+
+.NavButton {
+  width: 120px;
+}
+
+.FilterBar .NavButton.first {
+  border-radius: 5px 0px 0px 5px;
+}
+
+.FilterBar .NavButton.last {
+  border-radius: 0px 5px 5px 0px;
 }

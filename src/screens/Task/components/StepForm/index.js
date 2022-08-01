@@ -1,5 +1,8 @@
 import React, { Component } from 'react'
 import './index.css'
+import { TextField } from '@mui/material'
+import InputAdornment from '@mui/material/InputAdornment';
+import Button from '@mui/material/Button';
 
 const DEFAULT_SORT_ORDER = 1
 const DEFAULT_TIMEOUT = 5000
@@ -19,56 +22,21 @@ export default class StepForm extends Component {
         <h2>Add step</h2>
         }
         { this.props.step.name &&
-        <h2>Edit {this.props.step.name}</h2>
+        <h2>Editing {this.props.step.name}</h2>
         }
         <form ref="form" className="StepForm" onSubmit={this.submit.bind(this)}>
-          <div>
-            <label htmlFor="name">Name</label>
-            <input className="first" type="text" name="name" id="name" required 
-              placeholder="Name of step"
-              value={this.state.name || ''} 
-              onChange={this.handleChange.bind(this, 'name')} 
-            />
-          </div>
-          <div>
-            <label htmlFor="command">Command</label>
-            <input type="text" name="command" id="command" required 
-              placeholder="Command to run"
-              value={this.state.command || ''} 
-              onChange={this.handleChange.bind(this, 'command')} 
-            />
-          </div>
-          <div>
-            <label htmlFor="order">Order</label>
-            <input className="last" type="number" name="order" id="order" required 
-              placeholder="Execution order"
-              value={this.state.sort_order || DEFAULT_SORT_ORDER} 
-              onChange={this.handleChange.bind(this, 'sort_order')}
-            />
-          </div>
-          <div>
-            <label htmlFor="timeout">Timeout</label>
-            <input className="last" type="number" name="timeout" id="timeout" required 
-              placeholder="Execution timeout"
-              value={this.state.timeout || DEFAULT_TIMEOUT} 
-              onChange={this.handleChange.bind(this, 'timeout')}
-            />
-          </div>
-          <div>
-          <label htmlFor="stdoutregex">Regex</label>
-            <input className="last" name="stdoutregex" id="stdoutregex" 
-              placeholder="Regex on stdout"
-              value={this.state.stdoutregex || null} 
-              onChange={this.handleChange.bind(this, 'stdoutregex')}
-            />
-          </div>
+          <TextField id="name" label="Name" className='first' variant="outlined" required value={this.state.name} onChange={this.handleChange.bind(this, 'name')}/>
+          <TextField id="command" label="Command" multiline variant="outlined" required value={this.state.command || ''} onChange={this.handleChange.bind(this, 'command')}/>
+          <TextField id="order" label="Order" type="number" variant="outlined" required value={this.state.sort_order || DEFAULT_SORT_ORDER} onChange={this.handleChange.bind(this, 'sort_order')}/>
+          <TextField id="timeout" label="Timeout" type="number" variant="outlined" required value={this.state.timeout || DEFAULT_TIMEOUT} onChange={this.handleChange.bind(this, 'timeout')} />
+          <TextField id="stdoutregex" label="Regex" variant="outlined" value={this.state.stdoutregex || ''} onChange={this.handleChange.bind(this, 'stdoutregex')}/>
         </form>
         <div className="buttons">
-          <button className='btn btn-green' onClick={this.submit.bind(this)}>Save</button>
-          <button className='btn btn-orange' onClick={this.props.onCancel}>Cancel</button>
+          <Button onClick={this.submit.bind(this)} variant="outlined" color="success">Save</Button>
+          <Button onClick={this.props.onCancel} variant="outlined" id="CancelButton" color="warning">Cancel</Button>
           <div className="spacer"></div>
           { this.props.step.id !== 0 &&
-          <button className='btn btn-red' onClick={this.delete.bind(this)}>Delete</button>
+          <Button onClick={this.delete.bind(this)} variant="outlined" color="error">Delete</Button>
           }
         </div>
       </div>

@@ -15,21 +15,28 @@
   line-height: 30px;
   cursor: pointer;
 }
-
+/* 
 .ExecOutput .OutputSelector > div.selected {
   background-color: var(--background-color);
-}
+} */
 
 .ExecOutput .output {
-  background-color: #002932;
+  /* background-color: #002932; */
+  background-color: #263238;
   display: flex;
   padding: 10px;
   flex: auto;
 }
 
 .ExecOutput pre {
-  color: #91A1A1;
+  /* color: #91A1A1; */
+  
   text-align: left;
   white-space: pre-wrap;
   word-wrap: break-word;
+}
+
+.OutputSelector > .selected {
+  background-color: rgba(255, 255, 255, 0.3)
+  /* background-color: var(--background-color); */
 }

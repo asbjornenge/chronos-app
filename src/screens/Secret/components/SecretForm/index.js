@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
 import './index.css'
 import { toast } from 'react-toastify';
+import { TextField } from '@mui/material'
+import InputAdornment from '@mui/material/InputAdornment';
+import Button from '@mui/material/Button';
 export default class SecretForm extends Component {
   state = {
     name: '',
@@ -14,48 +17,27 @@ export default class SecretForm extends Component {
         <h2>Add Secret</h2>
         }
         { this.props.secret.name &&
-        <h2>Edit {this.props.secret.name}</h2>
+        <h2>Editing {this.props.secret.name}</h2>
         }
         <form ref="form" className="SecretForm" onSubmit={this.submit.bind(this)}>
-          <div>
-            <label htmlFor="name">Name</label>
-            <input className="first" type="text" name="name" id="name" required 
-              placeholder="Name of Secret"
-              value={this.state.name || ''} 
-              onChange={this.handleChange.bind(this, 'name')} 
-            />
-          </div>
-          <div>
-            <label htmlFor="secretvalue">Value</label>
-            <input type="text" name="secretvalue" id="secretvalue" required 
-              placeholder="Value"
-              value={this.state.secretvalue} 
-              onChange={this.handleChange.bind(this, 'secretvalue')} 
-            />
-          </div>
+          <TextField id="name" label="Name" required variant='outlined' value={this.state.name || ''} onChange={this.handleChange.bind(this, 'name')} ></TextField> 
+          <TextField id="secretvalue" label="Value" required variant='outlined' value={this.state.secretvalue} onChange={this.handleChange.bind(this, 'secretvalue')} ></TextField>
           <br/>
-          <div>
-            <label htmlFor="usage">Usage</label>
-            <span name="usage" id="clickable" onClick={() => {
-                toast.promise(navigator.clipboard.writeText('{{' + this.state.name + '}}'),
-                {
-                  pending: "Copying...",
-                  success: "Copied to clipboard!",
-                  error: "Failed to copy to clipboard!"
-                })
-              }}>
-              {
-                '{{' + this.state.name + '}}'
-              }
-            </span>
-          </div>
+          <TextField id="usage" label="Usage" value={'{{' + this.state.name + '}}'} disabled onClick={() => {
+            toast.promise(navigator.clipboard.writeText('{{' + this.state.name + '}}'),
+            {
+              pending: "Copying...",
+              success: "Copied to clipboard!",
+              error: "Failed to copy to clipboard!"
+            })
+          }}/>
         </form>
         <div className="buttons">
-          <button className='btn btn-green' onClick={this.submit.bind(this)}>Save</button>
-          <button className='btn btn-orange' onClick={this.cancel.bind(this)}>Cancel</button>
+          <Button onClick={this.submit.bind(this)} variant="outlined" color="success">Save</Button>
+          <Button onClick={this.cancel.bind(this)} variant="outlined" id="CancelButton" color="warning">Cancel</Button>
           <div className="spacer"></div>
           { this.props.secret.id !== 0 &&
-          <button className='btn btn-red' onClick={this.delete.bind(this)}>Delete</button>
+          <Button onClick={this.delete.bind(this)} variant="outlined" color="error">Delete</Button>
           }
         </div>
       </div>

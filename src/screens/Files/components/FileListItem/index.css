@@ -7,9 +7,9 @@
 }
 
 .FileListItem:hover {
-  transform: scale(1.01);
-  background-color: #fefefe;
-  border: 1px solid var(--border-color)
+  /* transform: scale(1.01); */
+  background-color: rgba(255, 255, 255, 0.3);
+  border: 1px solid var(--border-color);
 }
 
 .FileListItem:last-of-type {
@@ -24,15 +24,15 @@
   background-color: var(--background-color);
 }
 
-.FileListItem span {
+/* .FileListItem span {
   display: block;
   padding: 10px;
-}
+} */
 
-.FileListItem pre {
+/* .FileListItem pre {
   display: block;
   padding: 10px;
-}
+} */
 
 .FileListItem img, svg {
   height: 30px;
@@ -43,27 +43,36 @@
   padding-right: 10px;
 }
 
-.img-clickable:hover {
+/* .img-clickable:hover {
   transform: scale(1.2);
-}
+} */
 
 .statusicon {
   margin-right: 15px;
 }
 
-.iconContainer {
-  width: 30px;
+.FileIconContainer {
+  max-width: 40px;
   height: 30px;
-}
-.filename {
-  margin-left: 20px;
-  border-left: 1px solid var(--background-color)
-}
-
-.filelisticon {
-  padding: 10px;
+  margin: 0px;
+  margin-right: 0px;
+  box-sizing:border-box;
 }
 
-.filelisticon:hover {
-  transform: scale(1.5);
+.FileName {
+  margin-left: 10px;
+  border-left: 1px solid rgba(255, 255, 255, 0.3);
+  padding-left: 10px;
+}
+ 
+.FileListIcon {
+  font-size: 30px;
+} 
+
+.flexmebruv {
+  display:flex;
+}
+
+.FileListIcon:hover {
+  transform: scale(1.1);
 }

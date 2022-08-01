@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { nav } from '../../utils'
 import './index.css';
-
 export default class Header extends Component {
   render() {
     return (

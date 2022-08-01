@@ -4,9 +4,14 @@ import FilterBar from '../../shared/components/FilterBar'
 import SecretListItem from './components/SecretListItem'
 import SecretForm from './components/SecretForm'
 import './index.css'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLock } from '@fortawesome/free-solid-svg-icons'
 import * as api from '../../shared/api'
+import TopBar from '../../shared/components/TopBar'
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import Paper from '@mui/material/Paper';
 
 const addSecret = {
   id: -1,
@@ -23,21 +28,20 @@ const SecretWrapper = (props) => {
         statusFilter={props.statusFilter}
         setStatusFilter={props.setStatusFilter}
         onAddClick={props.toggleAddSecret}
-        disabledStatus={['paused', 'passing', 'failing']}
+        disabledStatus={['paused', 'passing', 'failing', 'run']}
        />
       {props.children}
     </div>
   )
 }
 
-export default (props) => {
+const Secret = (props) => {
   const [selectedSecret, setSelectedSecret] = useState({})
   const [editingSecret, setEditingSecret] = useState(null)
   const [addingSecret, setAddingSecret] = useState(false)
   const [textFilter, setTextFilter] = useState('')
   const [statusFilter, setStatusFilter] = useState('')
   const [_secrets, setSecrets] = useSecrets()
-  //const _secret = () => api.getSecret()
 
   let toggleAddSecret = () => {
     let isAdding = !addingSecret
@@ -69,8 +73,6 @@ export default (props) => {
       }}
       />
   })
-  //let _secrets = [].concat(_secret())
-  //if (addingSecret) _secrets.push(addSecret)
 
   return (
     <SecretWrapper 
@@ -83,15 +85,23 @@ export default (props) => {
         }}
       toggleAddSecret={toggleAddSecret}
     >
+      <TopBar
+          faIcon = {faLock}
+          title = { "Secrets" }
+        > 
+      </TopBar>
       <div className="SecretBody">
-        <div className="top">
-          <FontAwesomeIcon icon={faLock}/>
-          <h1>SECRETS</h1>
-          <div className="spacer"></div>
-        </div>
         <div className="SecretInfoWrapper">
           <div className="SecretList">
-            {secrets}  
+            <TableContainer component={Paper}>
+              <Table sx={{minWidth: 400}} aria-label="a dense table">
+                <TableHead>
+                </TableHead>
+                <TableBody>
+                  {secrets}
+                </TableBody>
+              </Table>
+            </TableContainer> 
           </div>
           <div className='SecretEdit'>
           { editingSecret && 
@@ -137,10 +147,5 @@ export default (props) => {
     </SecretWrapper>
   )
 }
-//  async togglePause() {
-//    let res = await fetch(`${window.apihost}/tasks/${task.id}`, { method: 'PUT', body: JSON.stringify({ paused: !task.paused}) })
-//    if (!res.ok) return
-//    props.dispatch(rest.actions.task.reset())
-//    props.dispatch(rest.actions.task.sync({id:task.id, steps:true, execs:10}))
-//  }
-//}
+
+export default Secret

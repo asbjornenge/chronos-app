@@ -27,6 +27,20 @@ export async function saveSecret(secret) {
   else return await updateSecret(secret)
 }
 
+export async function getExecs(task, step) {
+  return await fetch(`${window.apihost}/tasks/${task.id}/steps/${step.id}/execs`, {credentials: "include"})
+    .then(res => res.json())
+}
+
+export async function getTaskDashboard(task) {
+  return await fetch(`${window.apihost}/dashboard/task/${task}`, {credentials: "include"})
+    .then(res => res.json())
+}
+
+export async function getSteps(task) {
+  return await fetch(`${window.apihost}/tasks/${task.id}/steps`)
+}
+
 export async function addSecret(secret) {
   delete secret.id
   return await toast.promise(fetch(`${window.apihost}/secrets`,
@@ -92,7 +106,6 @@ export async function removeSecret(secret) {
       error: "Failed to delete secret!"
     }).catch(err => err)
 }
-
 
 export async function addTask(task) {
   delete task.id
