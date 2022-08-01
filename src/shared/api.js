@@ -1,6 +1,7 @@
 import { toast } from 'react-toastify';
 
 window.apihost = window.location.hostname === 'localhost' ? `http://${window.location.hostname}:3001` : './api'
+window.socketHost = window.location.hostname === 'localhost' ? `http://${window.location.hostname}:3001` : `https://${window.location.hostname}/api/`
 
 export async function getTask(id, params='') {
   return await fetch(`${window.apihost}/tasks/${id}${params}`, {credentials: 'include'}) 
