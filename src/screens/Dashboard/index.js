@@ -57,6 +57,14 @@ const Dashboard = (props) => {
       if (t.name.toLowerCase().indexOf(textFilter.toLowerCase()) >= 0) return true
       return false
     })
+    .sort((a, b) => {
+      if (a.paused && !b.paused) {
+        return +1;
+      }
+      else {
+        return -1;
+      }
+    })
     .map(t => {
       return (
         <TaskListItem 
