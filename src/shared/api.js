@@ -9,6 +9,17 @@ export async function getTask(id, params='') {
     .then(res => res.json())
 }
 
+export async function AckTask(id) {
+  return await fetch(`${window.apihost}/acknowledge/${id}`, {credentials: 'include'}) 
+    .then(res => res.json())
+}
+
+export async function UnAckTask(id) {
+  return await fetch(`${window.apihost}/acknowledge/${id}`, {credentials: 'include', method: 'delete'}) 
+    .then(res => res.json())
+}
+
+
 export async function getProfile() {
   return await fetch(`${window.apihost}/profile`, {credentials: 'include'}) 
     .then(res => res.json())

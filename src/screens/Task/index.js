@@ -16,6 +16,7 @@ import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import Paper from '@mui/material/Paper';
+import { Button } from '@mui/material'
 
 const addStep = {
   id: 0,
@@ -58,6 +59,7 @@ const Task = (props) => {
     (async () => {
       setcTasks(await api.getTaskDashboard(props.id))
     })()
+    console.log(ctasks)
   }, [])
 
   useEffect(function() {
@@ -209,6 +211,33 @@ const Task = (props) => {
       success: "Scheduled task:" + task.name,
       error: "Failed task: " + task.name
     })
+
+    let tc = {...ctasks}
+    tc.acknowledged = false
+    setcTasks(tc)
+  }
+
+  let OnAck = async() => {
+    if (ctasks.acknowledged) {
+      await toast.promise(api.UnAckTask(task.id), 
+      {
+        pending: "Unacknowledging task: " + task.name,
+        success: "Unacknowledged task: " + task.name,
+        error: "Failed to unacknowledge: " + task.name
+      })
+    }
+    else {
+      await toast.promise(api.AckTask(task.id), 
+      {
+        pending: "Acknowledging task: " + task.name,
+        success: "Acknowledged task: " + task.name,
+        error: "Failed to acknowledge: " + task.name
+      })
+    }
+    
+    let tc = {...ctasks}
+    tc.acknowledged = !tc.acknowledged
+    setcTasks(tc)
   }
   
   
@@ -229,6 +258,17 @@ const Task = (props) => {
           title = { " " + task.name}
         >
             <span>
+              {
+                !ctasks.acknowledged ?
+                <Button variant="contained" color="error" style={{"marginRight": "20px"}} onClick={OnAck}>
+                  Acknowledge
+                </Button>
+                : 
+                <Button variant="containted" color="secondary" style={{"marginRight": "20px"}} onClick={OnAck}>
+                  Acknowledged
+                </Button>
+              }
+              
               {status === 'run' ? 
               <img src={`graphics/wait.svg`} alt="wait" className='runicon' />:
               <img src={`graphics/run.svg`} alt="run" onClick={OnRun} className='runicon img-clickable'/>}
