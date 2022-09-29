@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
 import './index.css'
-import { TextField } from '@mui/material'
+import { Checkbox, InputLabel, MenuItem, Select, TextField } from '@mui/material'
 import InputAdornment from '@mui/material/InputAdornment';
 import Button from '@mui/material/Button';
 
 const DEFAULT_SORT_ORDER = 1
 const DEFAULT_TIMEOUT = 5000
+const DEFAULT_STOPACTION = false
 
 export default class StepForm extends Component {
   state = {
@@ -13,7 +14,8 @@ export default class StepForm extends Component {
     command: '',
     sort_order: DEFAULT_SORT_ORDER,
     timeout: DEFAULT_TIMEOUT,
-    stdoutregex: null
+    stdoutregex: null,
+    stopOnFailure: DEFAULT_STOPACTION
   }
   render() {
     return (
@@ -30,6 +32,18 @@ export default class StepForm extends Component {
           <TextField id="order" label="Order" type="number" variant="outlined" required value={this.state.sort_order || DEFAULT_SORT_ORDER} onChange={this.handleChange.bind(this, 'sort_order')}/>
           <TextField id="timeout" label="Timeout" type="number" variant="outlined" required value={this.state.timeout || DEFAULT_TIMEOUT} onChange={this.handleChange.bind(this, 'timeout')} />
           <TextField id="stdoutregex" label="Regex" variant="outlined" value={this.state.stdoutregex || ''} onChange={this.handleChange.bind(this, 'stdoutregex')}/>
+          <InputLabel id="stopOnFailureLabel">Fail action</InputLabel>
+          <Select
+            labelId="stopOnFailureLabel"
+            id="stopOnFailure"
+            value={this.state.stopOnFailure || DEFAULT_STOPACTION}
+            label="Stop on failure"
+            onChange={this.handleChange.bind(this, 'stopOnFailure')}
+            style={{width: "200px"}}
+            >
+              <MenuItem value={true}>Stop</MenuItem>
+              <MenuItem value={false}>Ignore</MenuItem>
+          </Select>
         </form>
         <div className="buttons">
           <Button onClick={this.submit.bind(this)} variant="outlined" color="success">Save</Button>
@@ -58,10 +72,10 @@ export default class StepForm extends Component {
     this.setState(Object.assign(this.state, update))
   }
   setStateFromStep(step) {
-    let { id, name, command, sort_order, timeout, stdoutregex } = step
+    let { id, name, command, sort_order, timeout, stdoutregex, stopOnFailure } = step
     if (!sort_order) sort_order = this.props.numSteps+1
     if (!timeout) timeout = DEFAULT_TIMEOUT 
-    this.setState(Object.assign({id, name, command, sort_order, timeout, stdoutregex}))
+    this.setState(Object.assign({id, name, command, sort_order, timeout, stdoutregex, stopOnFailure}))
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.step.id !== this.props.step.id)
