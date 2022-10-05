@@ -191,7 +191,7 @@ export async function getFiles() {
     .then(res => res.json())
 }
 
-export async function uploadFile(files) {
+export async function uploadFile(files, selectedFolder) {
   const filePromises = files.map((file) => {
     // Return a promise per file
     return new Promise((resolve, reject) => {
@@ -200,7 +200,7 @@ export async function uploadFile(files) {
         try {
           // Resolve the promise with the response value
           let response = await toast.promise(
-            fetch(`${window.apihost}/files/${encodeURI(file.name)}`, 
+            fetch(`${window.apihost}/files/${!(selectedFolder === 'root') ? encodeURI(selectedFolder) + '/': ''}${encodeURI(file.name)}`, 
             {
               method: 'POST',
               body: reader.result,
@@ -235,6 +235,43 @@ export async function uploadFile(files) {
   // Wait for all promises to be resolved
   const returnfiles = await Promise.all(filePromises).catch(err => console.error(err));
   return returnfiles
+}
+
+export async function getFolders() {
+  return await fetch(`${window.apihost}/dir`, 
+  { 
+    method: 'get',
+    credentials:'include',
+  }).then(res => {
+    if (res.ok) {
+      return res.json()
+    }
+    else {
+      throw new Error(`Unable to fetch folders`)
+    }
+  
+  })
+}
+
+export async function mkdir(dir) {
+  return await toast.promise(fetch(`${window.apihost}/dir/${encodeURI(dir)}`, 
+    { 
+      method: 'POST', 
+      credentials: 'include'
+    })
+    .then(res => {
+      if (res.ok) {
+        return res.json()
+      }
+      else {
+        throw new Error(`Unable to add ${dir}`)
+      }
+    }).catch(err => this.reject(err.message)), 
+    {
+      pending: "Adding directory...",
+      success: "Directory added!",
+      error: "Failed to add directory!"
+    }).catch(err => err)
 }
 
 export async function deleteFile(file) {

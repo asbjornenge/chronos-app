@@ -63,6 +63,11 @@
   margin-left: 10px;
   border-left: 1px solid rgba(255, 255, 255, 0.3);
   padding-left: 10px;
+  font-style: italic;
+}
+
+.FileNameSub {
+  font-weight: 700;
 }
  
 .FileListIcon {

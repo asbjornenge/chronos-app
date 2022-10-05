@@ -30,7 +30,7 @@ export default class FileListItem extends Component {
       buttons: [
         {
           label: 'Yes',
-          onClick: () => this.props.onDelete(this.props.file.name)
+          onClick: () => this.props.onDelete(this.props.file)
         },
         {
           label: 'No',
@@ -49,7 +49,8 @@ export default class FileListItem extends Component {
             <div className='FileIconContainer'>
               <FileIcon extension={ext.length > 0 && ext.length < 4 ? ext : "N/A"}/>
             </div>
-            <span className='FileName'>{this.props.file.fullname}</span>
+            <span className='FileName'>{this.props.file.subfolder}/</span>
+            <span className='FileNameSub'> {this.props.file.name}</span>
           </div>
         </TableCell>
         <TableCell align="right">

@@ -67,6 +67,12 @@
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
+  margin-left: 5px;
+}
+
+.FileFormChild {
+  margin-top: 20px;
+  margin-bottom: 10px;
 }
 /* 
 .img-clickable {
